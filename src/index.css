@@ -7,6 +7,16 @@
 @theme {
     --font-inter: "Inter", sans-serif;
     --font-Helvetica_Neue: "Helvetica Neue", sans-serif;
+    --color-font-primary: #2A2A2A;
+    --color-font-secondary: #949494;
+
+    --color-green-primary: #537D5D;
+    --color-green-secondary: #73946B;
+    --color-green-gradation: linear-gradient(to right, #537D5D, #73946B);
+    --color-green-light: #9EBC8A;
+
+    --color-blend: #F5F5F5;
+
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -117,6 +127,7 @@
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.551 0.027 264.364);
 }
+
 
 @layer base {
     * {
