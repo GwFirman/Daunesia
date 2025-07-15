@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 
 import image_login from "@/assets/images/image_login.png";
-import Daunesia from "@/assets/logo/LogoDaunesia.svg";
+import Daunesia from "@/assets/logo/LogoDaunesia.png";
 
 export default function Register() {
     return (
@@ -12,7 +12,7 @@ export default function Register() {
                 {/* Left Panel */}
                 <div className="flex flex-1 p-5">
                     <div className="flex flex-1 flex-col rounded-2xl bg-white p-4">
-                        <div className="flex items-center flex-row">
+                        <div className="flex flex-row items-center">
                             <img src={Daunesia} alt="Logo Daunesia" className="h-12" />
 
                             <div className="text-font-primary mr-4 ml-auto font-medium">

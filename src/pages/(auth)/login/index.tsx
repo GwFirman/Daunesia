@@ -3,19 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 
 import image_login from "@/assets/images/image_login.png";
-import Daunesia from "@/assets/logo/LogoDaunesia.svg";
+import Daunesia from "@/assets/logo/LogoDaunesia.png";
 
 export default function Login() {
     return (
         <div className="flex h-screen max-w-screen bg-neutral-100">
-            <div className="mx-auto flex w-full max-w-8xl flex-row gap-4 min-h-screen">
+            <div className="max-w-8xl mx-auto flex min-h-screen w-full flex-row gap-4">
                 {/* Left Panel */}
                 <div className="flex flex-1 p-5">
                     <div className="flex flex-1 flex-col rounded-2xl bg-white p-4">
-                        <div className="flex items-center flex-row">
+                        <div className="flex flex-row items-center">
                             <img src={Daunesia} alt="Logo Daunesia" className="h-12" />
 
-                            <div className="ml-auto mr-4 font-medium text-font-primary">
+                            <div className="text-font-primary mr-4 ml-auto font-medium">
                                 <p className="hidden lg:inline">{"Belum ada akun? "}</p>
                                 <Link to={"/register"} className="text-green-primary hover:underline">
                                     Daftar
@@ -27,12 +27,12 @@ export default function Login() {
                             <div className="flex w-full max-w-lg flex-1 flex-col gap-4">
                                 {/* Header */}
                                 <div className="flex flex-col gap-1">
-                                    <div className="text-4xl font-bold text-font-primary">Masuk Sekarang</div>
+                                    <div className="text-font-primary text-4xl font-bold">Masuk Sekarang</div>
                                     <div className="text-md text-font-secondary">Silakan masukkan informasi Anda untuk masuk ke akun.</div>
                                 </div>
 
                                 {/* Social Buttons */}
-                                <div className="flex w-full flex-col gap-4 mt-4 lg:flex-row">
+                                <div className="mt-4 flex w-full flex-col gap-4 lg:flex-row">
                                     <div className="flex h-12 w-full items-center justify-center rounded-lg border-2 border-zinc-800/40 bg-white">
                                         <div className="mr-2">
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -49,7 +49,9 @@ export default function Login() {
                                                 </defs>
                                             </svg>
                                         </div>
-                                        <a href="" className="font-medium text-font-primary">Login dengan Google</a>
+                                        <a href="" className="text-font-primary font-medium">
+                                            Login dengan Google
+                                        </a>
                                     </div>
                                     <div className="flex h-12 w-full items-center justify-center rounded-lg border-2 border-zinc-800/40 bg-white">
                                         <div className="mr-2">
@@ -71,39 +73,45 @@ export default function Login() {
                                                 </defs>
                                             </svg>
                                         </div>
-                                        <a href="" className="font-medium text-font-primary">Login dengan Facebook</a>
+                                        <a href="" className="text-font-primary font-medium">
+                                            Login dengan Facebook
+                                        </a>
                                     </div>
                                 </div>
 
                                 {/* Divider */}
                                 <div className="flex items-center gap-6">
                                     <div className="h-0.5 w-full rounded-lg bg-zinc-300" />
-                                    <div className="text-base text-font-secondary">atau</div>
+                                    <div className="text-font-secondary text-base">atau</div>
                                     <div className="h-0.5 w-full rounded-lg bg-zinc-300" />
                                 </div>
 
                                 {/* Email Input */}
                                 <div className="flex w-full flex-col gap-2">
-                                    <div className="text-sm font-medium text-font-primary">Email</div>
-                                    <Input type="email" placeholder="Masukan email kamu" className="placeholder:text-font-secondary h-10 rounded-lg border-2 border-font-secondary bg-white px-4 text-font-primary" />
+                                    <div className="text-font-primary text-sm font-medium">Email</div>
+                                    <Input type="email" placeholder="Masukan email kamu" className="placeholder:text-font-secondary border-font-secondary text-font-primary h-10 rounded-lg border-2 bg-white px-4" />
                                 </div>
 
                                 {/* Password Input */}
                                 <div className="flex w-full flex-col gap-2">
-                                    <div className="text-sm font-medium text-font-primary">Password</div>
+                                    <div className="text-font-primary text-sm font-medium">Password</div>
                                     <div className="relative">
-                                        <Input type="password" placeholder="Masukan password kamu" className="placeholder:text-font-secondary h-10 rounded-lg border-2 border-font-secondary bg-white px-4 text-font-primary" />
+                                        <Input type="password" placeholder="Masukan password kamu" className="placeholder:text-font-secondary border-font-secondary text-font-primary h-10 rounded-lg border-2 bg-white px-4" />
                                         <div className="absolute top-4 right-4">{/* Eye SVG */}</div>
                                     </div>
                                 </div>
 
                                 {/* Forgot Password */}
-                                <div className="text-right font-medium text-green-primary -mt-3 mb-2"><a href="">Lupa password?</a></div>
+                                <div className="text-green-primary -mt-3 mb-2 text-right font-medium">
+                                    <a href="">Lupa password?</a>
+                                </div>
 
                                 {/* Login Button */}
                                 <div className="flex w-full flex-col gap-4">
                                     <div className="mt-2 w-full">
-                                        <Button className="h-12 w-full rounded-lg font-medium text-white cursor-pointer" style={{ background: 'linear-gradient(to right, #537D5D, #73946B)' }}>Masuk</Button>
+                                        <Button className="h-12 w-full cursor-pointer rounded-lg font-medium text-white" style={{ background: "linear-gradient(to right, #537D5D, #73946B)" }}>
+                                            Masuk
+                                        </Button>
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +120,7 @@ export default function Login() {
                 </div>
 
                 {/* Right Panel */}
-                <div className="-ml-10 hidden w-full  max-w-md p-5 lg:flex">
+                <div className="-ml-10 hidden w-full max-w-md p-5 lg:flex">
                     <img className="flex-1 rounded-xl object-cover" src={image_login} alt="Login Illustration" />
                 </div>
             </div>
