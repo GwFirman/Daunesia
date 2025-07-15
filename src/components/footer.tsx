@@ -14,7 +14,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className="bg-font-primary text-white text-center py-4 mt-5">
-                <p className="text-sm m-0">© 2025 Daunesia. All rights reserved.</p>
+                <p className="text-sm m-0">© {new Date().getFullYear()} Daunesia. All rights reserved.</p>
             </div>
         </footer>
     );
