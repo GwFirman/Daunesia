@@ -1,66 +1,69 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import image_login from "@/assets/images/image_login.png";
 import { Link } from "react-router";
+
+import image_login from "@/assets/images/image_login.png";
+import Daunesia from "@/assets/logo/LogoDaunesia.svg";
 
 export default function Register() {
     return (
-        <div className="flex min-h-screen max-w-screen bg-neutral-100">
-            <div className="mx-auto flex w-full max-w-8xl flex-row gap-4">
+        <div className="flex h-screen max-w-screen bg-neutral-100">
+            <div className="max-w-8xl mx-auto flex w-full flex-row gap-4">
                 {/* Left Panel */}
                 <div className="flex flex-1 p-5">
-                    <div className="flex flex-1 flex-col rounded-xl bg-white p-6">
-                        <div className="flex flex-row">
-                            <div className="text-lg font-medium text-font-primary">Daunesia</div>
+                    <div className="flex flex-1 flex-col rounded-2xl bg-white p-4">
+                        <div className="flex items-center flex-row">
+                            <img src={Daunesia} alt="Logo Daunesia" className="h-12" />
+
+                            <div className="text-font-primary mr-4 ml-auto font-medium">
+                                <p className="hidden lg:inline">{"Sudah punya akun? "}</p>
+                                <Link to={"/login"} className="text-green-primary hover:underline">
+                                    Masuk
+                                </Link>
+                            </div>
                         </div>
 
-                        <div className="flex flex-1 justify-center mt-4">
-                            <div className="flex w-full max-w-lg flex-1 flex-col gap-2.5">
+                        <div className="mt-8 flex flex-1 justify-center">
+                            <div className="flex w-full max-w-lg flex-1 flex-col gap-3">
                                 {/* Header */}
                                 <div className="flex flex-col gap-1">
-                                    <div className="text-4xl font-bold text-font-primary">Buat Akun</div>
+                                    <div className="text-font-primary text-4xl font-bold">Buat Akun</div>
                                     <div className="text-md text-font-secondary">Gabung sekarang untuk mendeteksi semua tanaman herbal di Indonesia</div>
                                 </div>
 
                                 <div className="flex w-full flex-col gap-2">
-                                    <div className="text-sm font-medium text-font-primary">Username</div>
-                                    <Input type="text" placeholder="Masukan username kamu" className="placeholder:text-font-secondary h-10 rounded-lg border-2 border-font-secondary bg-white px-4 text-font-primary" />
+                                    <div className="text-font-primary text-sm font-medium">Username</div>
+                                    <Input type="text" placeholder="Masukan username kamu" className="placeholder:text-font-secondary border-font-secondary text-font-primary h-10 rounded-lg border-2 bg-white px-4" />
                                 </div>
 
                                 {/* Email Input */}
                                 <div className="flex w-full flex-col gap-2">
-                                    <div className="text-sm font-medium text-font-primary">Email</div>
-                                    <Input type="email" placeholder="Masukan email kamu" className="placeholder:text-font-secondary h-10 rounded-lg border-2 border-zinc-800/40 bg-white px-4 text-font-primary" />
+                                    <div className="text-font-primary text-sm font-medium">Email</div>
+                                    <Input type="email" placeholder="Masukan email kamu" className="placeholder:text-font-secondary text-font-primary h-10 rounded-lg border-2 border-zinc-800/40 bg-white px-4" />
                                 </div>
 
                                 {/* Password Input */}
                                 <div className="flex w-full flex-col gap-2">
-                                    <div className="text-sm font-medium text-font-primary">Password</div>
+                                    <div className="text-font-primary text-sm font-medium">Password</div>
                                     <div className="relative">
-                                        <Input type="password" placeholder="Masukan password kamu" className="placeholder:text-font-secondary h-10 rounded-lg border-2 border-zinc-800/40 bg-white px-4 text-font-primary" />
-                                        <div className="absolute top-4 right-4">{/* Eye SVG */}</div>
-                                    </div>
-                                </div>
-
-                                <div className="flex w-full flex-col gap-2">
-                                    <div className="text-sm font-medium text-font-primary">Konfirmasi Password</div>
-                                    <div className="relative">
-                                        <Input type="password" placeholder="Konfirmasi password kamu" className="placeholder:text-font-secondary h-10 rounded-lg border-2 border-zinc-800/40 bg-white px-4 text-font-primary" />
+                                        <Input type="password" placeholder="Masukan password kamu" className="placeholder:text-font-secondary text-font-primary h-10 rounded-lg border-2 border-zinc-800/40 bg-white px-4" />
                                         <div className="absolute top-4 right-4">{/* Eye SVG */}</div>
                                     </div>
                                 </div>
 
                                 {/* Login Button */}
-                                <div className="flex w-full flex-col gap-4">
-                                    <div className="mt-6 w-full">
-                                        <Button className="h-12 w-full rounded-lg font-medium text-white cursor-pointer" style={{ background: 'linear-gradient(to right, #537D5D, #73946B)' }}>Daftar</Button>
+                                <div className="flex w-full flex-col">
+                                    <div className="mt-3 w-full">
+                                        <Button className="h-12 w-full cursor-pointer rounded-lg font-medium text-white" style={{ background: "linear-gradient(to right, #537D5D, #73946B)" }}>
+                                            Daftar
+                                        </Button>
                                     </div>
                                 </div>
 
                                 {/* Divider */}
-                                <div className="flex items-center gap-6">
+                                <div className="mt-3 flex items-center gap-6">
                                     <div className="h-0.5 w-full rounded-lg bg-zinc-300" />
-                                    <div className="text-base text-font-secondary">atau</div>
+                                    <div className="text-font-secondary text-base whitespace-nowrap">atau daftar dengan</div>
                                     <div className="h-0.5 w-full rounded-lg bg-zinc-300" />
                                 </div>
 
@@ -82,7 +85,7 @@ export default function Register() {
                                                 </defs>
                                             </svg>
                                         </div>
-                                        <div className="font-medium text-font-primary">Google</div>
+                                        <div className="text-font-primary font-medium">Google</div>
                                     </div>
                                     <div className="flex h-12 w-full items-center justify-center rounded-lg border-2 border-zinc-800/40 bg-white">
                                         <div className="mr-2">
@@ -104,15 +107,8 @@ export default function Register() {
                                                 </defs>
                                             </svg>
                                         </div>
-                                        <div className="font-medium text-font-primary">Facebook</div>
+                                        <div className="text-font-primary font-medium">Facebook</div>
                                     </div>
-                                </div>
-
-                                <div className="mx-auto font-medium text-font-primary">
-                                    <p className="hidden lg:inline">{"Sudah punya akun? "}</p>
-                                    <Link to={"/login"} className="text-green-primary hover:underline">
-                                        Masuk
-                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +117,7 @@ export default function Register() {
 
                 {/* Right Panel */}
                 <div className="-ml-10 hidden w-full max-w-md p-5 lg:flex">
-                    <img className="flex-1 rounded-lg object-cover" src={image_login} alt="Login Illustration" />
+                    <img className="flex-1 rounded-xl object-cover" src={image_login} alt="Login Illustration" />
                 </div>
             </div>
         </div>

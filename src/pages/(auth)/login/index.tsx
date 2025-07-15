@@ -1,19 +1,21 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import image_login from "@/assets/images/image_login.png";
 import { Link } from "react-router";
+
+import image_login from "@/assets/images/image_login.png";
+import Daunesia from "@/assets/logo/LogoDaunesia.svg";
 
 export default function Login() {
     return (
-        <div className="flex min-h-screen max-w-screen bg-neutral-100">
-            <div className="mx-auto flex w-full max-w-8xl flex-row gap-4">
+        <div className="flex h-screen max-w-screen bg-neutral-100">
+            <div className="mx-auto flex w-full max-w-8xl flex-row gap-4 min-h-screen">
                 {/* Left Panel */}
                 <div className="flex flex-1 p-5">
-                    <div className="flex flex-1 flex-col rounded-xl bg-white p-6">
-                        <div className="flex flex-row">
-                            <div className="text-lg font-medium text-font-primary">Daunesia</div>
+                    <div className="flex flex-1 flex-col rounded-2xl bg-white p-4">
+                        <div className="flex items-center flex-row">
+                            <img src={Daunesia} alt="Logo Daunesia" className="h-12" />
 
-                            <div className="ml-auto font-medium text-font-primary">
+                            <div className="ml-auto mr-4 font-medium text-font-primary">
                                 <p className="hidden lg:inline">{"Belum ada akun? "}</p>
                                 <Link to={"/register"} className="text-green-primary hover:underline">
                                     Daftar
@@ -83,14 +85,14 @@ export default function Login() {
                                 {/* Email Input */}
                                 <div className="flex w-full flex-col gap-2">
                                     <div className="text-sm font-medium text-font-primary">Email</div>
-                                    <Input type="email" placeholder="Masukan email kamu" className="placeholder:text-font-secondary h-10 rounded-lg border-2 border-font-secondary bg-white px-4 text-[var(--font-primary-color)]" />
+                                    <Input type="email" placeholder="Masukan email kamu" className="placeholder:text-font-secondary h-10 rounded-lg border-2 border-font-secondary bg-white px-4 text-font-primary" />
                                 </div>
 
                                 {/* Password Input */}
                                 <div className="flex w-full flex-col gap-2">
                                     <div className="text-sm font-medium text-font-primary">Password</div>
                                     <div className="relative">
-                                        <Input type="password" placeholder="Masukan password kamu" className="placeholder:text-font-secondary h-10 rounded-lg border-2 border-font-secondary bg-white px-4 text-[var(--font-primary-color)]" />
+                                        <Input type="password" placeholder="Masukan password kamu" className="placeholder:text-font-secondary h-10 rounded-lg border-2 border-font-secondary bg-white px-4 text-font-primary" />
                                         <div className="absolute top-4 right-4">{/* Eye SVG */}</div>
                                     </div>
                                 </div>
@@ -110,8 +112,8 @@ export default function Login() {
                 </div>
 
                 {/* Right Panel */}
-                <div className="-ml-10 hidden w-full max-w-md p-5 lg:flex">
-                    <img className="flex-1 object-cover" src={image_login} alt="Login Illustration" />
+                <div className="-ml-10 hidden w-full  max-w-md p-5 lg:flex">
+                    <img className="flex-1 rounded-xl object-cover" src={image_login} alt="Login Illustration" />
                 </div>
             </div>
         </div>
