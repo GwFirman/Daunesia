@@ -2,8 +2,9 @@
 import { cn } from "@/lib/utils";
 import { MenuIcon, XIcon } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "motion/react";
-
+import daunesia from "@/assets/icons/logo/LogoDaunesia.png";
 import React, { useRef, useState } from "react";
+import { Link } from "react-router";
 
 interface NavbarProps {
     children: React.ReactNode;
@@ -160,10 +161,9 @@ export const MobileNavToggle = ({ isOpen, onClick }: { isOpen: boolean; onClick:
 
 export const NavbarLogo = () => {
     return (
-        <a href="#" className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black">
-            <img src="https://assets.aceternity.com/logo-dark.png" alt="logo" width={30} height={30} />
-            <span className="font-medium text-black dark:text-white">Startup</span>
-        </a>
+        <Link to="/" className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black">
+            <img src={daunesia} alt="logo" className="h-7.5" />
+        </Link>
     );
 };
 
