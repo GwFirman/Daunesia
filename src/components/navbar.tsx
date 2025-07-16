@@ -28,16 +28,7 @@ const Navbars = () => {
                             <motion.div layout onHoverStart={() => setPathname("/")} onHoverEnd={() => setPathname(location.pathname)}>
                                 <Link className="relative" to={"/"}>
                                     <p className="relative">Beranda</p>
-                                    {pathname === "/" && (
-                                        <motion.div
-                                            layoutId="navbar-2"
-                                            className="absolute h-[1.8px] w-full rounded-md bg-black"
-                                            initial={{ scaleX: 0.5, opacity: 0 }}
-                                            animate={{ scaleX: 1, opacity: 1 }}
-                                            exit={{ scaleX: 0.5, opacity: 0 }}
-                                            transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1] }}
-                                        />
-                                    )}
+                                    {pathname === "/" && <motion.div layoutId="navbar-2" className="absolute h-[1.8px] w-full rounded-md bg-black" initial={{ scaleX: 0.5 }} animate={{ scaleX: 1, opacity: 1 }} exit={{ scaleX: 0.5 }} transition={{ duration: 1, ease: [0.42, 0, 0.58, 1], type: "spring" }} />}
                                 </Link>
                             </motion.div>
                             <motion.div layout onHoverStart={() => setPathname("/tentang-kami")} onHoverEnd={() => setPathname(location.pathname)}>
@@ -57,8 +48,8 @@ const Navbars = () => {
                         <div />
                         <div />
                         <div className="flex items-center gap-4">
-                            <Link className="text-font-primary text-base" to={"/login"}>
-                                Masuk
+                            <Link className="text-font-primary relative text-base" to={"/login"}>
+                                <p className="relative">Masuk</p>
                             </Link>
                             <Link className="bg-green-primary flex h-10 items-center rounded-xl px-5.5 font-medium text-white" to={"/deteksi"}>
                                 Mulai Sekarang
@@ -69,6 +60,6 @@ const Navbars = () => {
             </NavBody>
         </Navbar>
     );
-}
+};
 
 export default Navbars;
