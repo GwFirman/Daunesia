@@ -1,7 +1,7 @@
 import Daunesia from "@/assets/icons/logo/LogoDaunesia.svg";
 import { Link } from "react-router";
 
-export default function Navbar() {
+const Navbar = () => {
     return (
         <div className="w-full border-b ">
             <div className="mx-auto flex h-18 max-w-7xl flex-row items-center p-4">
@@ -39,3 +39,5 @@ export default function Navbar() {
         </div>
     );
 }
+
+export default Navbar;

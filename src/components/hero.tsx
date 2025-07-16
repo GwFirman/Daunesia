@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import image_home from "@/assets/images/image_home.png";
 
-const hero = () => {
+const Hero = () => {
     return (
         <motion.section className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-12 px-5 py-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
             <motion.div className="flex flex-1 flex-col-reverse items-center justify-center gap-8 lg:flex-row lg:justify-between">
@@ -24,7 +24,7 @@ const hero = () => {
                 </motion.div>
 
                 <motion.div className="mt-12" initial={{ opacity: 0, scale: 0.9, filter: "blur(4px)" }} animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }} transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.2 }}>
-                    <img src={image_home} className="w-full max-w-sm lg:max-w-md" draggable={false} alt="Hero illustration" />
+                    <img src={image_home} className="w-full max-w-sm lg:max-w-md" draggable={false} alt="H illustration" />
                 </motion.div>
             </motion.div>
 
@@ -56,4 +56,4 @@ const hero = () => {
     );
 };
 
-export default hero;
+export default Hero;
