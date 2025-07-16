@@ -1,6 +1,7 @@
 import cameraIcons from "@/assets/icons/cameraIcons.svg";
 import shieldIcons from "@/assets/icons/shieldIcons.svg";
 import geminiIcons from "@/assets/icons/geminiIcons.svg";
+import { Meteors } from "./ui/meteors";
 
 const features = [
     {
@@ -30,13 +31,13 @@ const Feature = () => {
 
                 <div className="flex flex-col gap-1 text-center">
                     <div className="text-font-primary text-3xl font-bold">Kenapa Harus Daunesia?</div>
-                    <p className="text-font-primary w-200 text-lg font-normal">Daunesia menggabungkan kearifan lokal dengan teknologi modern untuk membantumu memahami tanaman di sekitarmu.</p>
+                    <p className="text-font-primary max-w-200 text-lg font-normal break-words">Daunesia menggabungkan kearifan lokal dengan teknologi modern untuk membantumu memahami tanaman di sekitarmu.</p>
                 </div>
 
                 {/* Cards */}
                 <div className="mt-8 grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {features.map((item, index) => (
-                        <div key={index} className="border-green-secondary rounded-xl border p-6 text-left shadow-sm">
+                        <div key={index} className="border-green-secondary relative overflow-hidden rounded-xl border p-6 text-left shadow-sm">
                             <div className="mb-4 flex items-center gap-2">
                                 <div className="flex h-10 items-center justify-center rounded-full">
                                     <img src={item.icons} alt="icon" />
@@ -44,6 +45,7 @@ const Feature = () => {
                             </div>
                             <h3 className="text-font-primary mb-2 text-lg font-semibold">{item.title}</h3>
                             <p className="text-font-secondary text-sm">{item.description}</p>
+                            <Meteors number={16} />
                         </div>
                     ))}
                 </div>

@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import url("https://fonts.cdnfonts.com/css/helvetica-neue-5");
-@import url('https://fonts.googleapis.com/css2?family=Playwrite+DK+Loopet:wght@100..400&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Playwrite+DK+Loopet:wght@100..400&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+DK+Loopet:wght@100..400&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Playwrite+DK+Loopet:wght@100..400&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -10,17 +10,34 @@
     --font-inter: "Inter", sans-serif;
     --font-Helvetica_Neue: "Helvetica Neue", sans-serif;
     --font-Playwrite_DK_Loopet: "Playwrite DK Loopet", sans-serif;
-    --color-font-primary: #2A2A2A;
+    --color-font-primary: #2a2a2a;
     --color-font-secondary: #949494;
 
-    --color-green-primary: #537D5D;
-    --color-green-secondary: #73946B;
-    --color-green-gradation: linear-gradient(to right, #537D5D, #73946B);
-    --color-green-light: #9EBC8A;
-    --color-green-second-light: #C5D7B9;
+    --color-green-primary: #537d5d;
+    --color-green-secondary: #73946b;
+    --color-green-gradation: linear-gradient(to right, #537d5d, #73946b);
+    --color-green-light: #9ebc8a;
+    --color-green-second-light: #c5d7b9;
 
-    --color-blend: #F5F5F5;
+    --color-blend: #f5f5f5;
+}
 
+@theme inline {
+    --animate-meteor-effect: meteor 5s linear infinite;
+
+    @keyframes meteor {
+        0% {
+            transform: rotate(215deg) translateX(0);
+            opacity: 1;
+        }
+        70% {
+            opacity: 1;
+        }
+        100% {
+            transform: rotate(215deg) translateX(-500px);
+            opacity: 0;
+        }
+    }
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -131,7 +148,6 @@
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.551 0.027 264.364);
 }
-
 
 @layer base {
     * {

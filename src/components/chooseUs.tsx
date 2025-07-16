@@ -1,5 +1,6 @@
 import chooseUsImg from "@/assets/images/chooseUs.png";
 import { Link } from "react-router";
+import { Cover } from "@/components/ui/cover";
 
 const chooseUs = () => {
     return (
@@ -12,11 +13,15 @@ const chooseUs = () => {
 
                 {/* Rigth Section */}
                 <div className="flex w-full flex-col gap-3 lg:w-2/4">
-                    <div className="bg-green-second-light text-green-primary inline-flex max-w-max items-center justify-center rounded-full px-4 py-1">
-                        <p className="text-lg">Pilih Daunesia</p>
+                    <div className="flex flex-row items-start justify-between">
+                        <div className="bg-green-second-light text-green-primary inline-flex max-w-max items-center justify-center rounded-full px-4 py-1">
+                            <p className="text-lg">Pilih Daunesia</p>
+                        </div>
                     </div>
                     <div className="flex flex-col gap-1 text-start">
-                        <div className="text-font-primary text-3xl font-bold">Mulailah Petualangan Herbalmu Hari Ini</div>
+                        <div className="text-font-primary text-3xl font-bold">
+                            Mulailah <Cover>Petualangan</Cover> Herbalmu Hari Ini
+                        </div>
                         <p className="text-font-primary text-lg">Bergabunglah bersama ribuan orang yang belajar mengenal tanaman herbal Indonesia lewat Daunesia.</p>
                     </div>
                     <div className="text-font-secondary flex flex-col gap-4">
