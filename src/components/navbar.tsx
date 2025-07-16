@@ -1,10 +1,11 @@
-import Daunesia from "@/assets/icons/logo/LogoDaunesia.png";
 import { Link, useLocation } from "react-router";
 import { Navbar, NavBody } from "./ui/resizable-navbar";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-export default function Navbarss() {
+import Daunesia from "@/assets/icons/logo/LogoDaunesia.png";
+
+const Navbars = () => {
     const [pathname, setPathname] = useState("");
 
     const location = useLocation();
@@ -27,7 +28,16 @@ export default function Navbarss() {
                             <motion.div layout onHoverStart={() => setPathname("/")} onHoverEnd={() => setPathname(location.pathname)}>
                                 <Link className="relative" to={"/"}>
                                     <p className="relative">Beranda</p>
-                                    {pathname === "/" && <motion.div layoutId="navbar-2" className="absolute h-[1.8px] w-full rounded-md bg-black" transition={{ type: "spring", duration: 1 }} />}
+                                    {pathname === "/" && (
+                                        <motion.div
+                                            layoutId="navbar-2"
+                                            className="absolute h-[1.8px] w-full rounded-md bg-black"
+                                            initial={{ scaleX: 0.5, opacity: 0 }}
+                                            animate={{ scaleX: 1, opacity: 1 }}
+                                            exit={{ scaleX: 0.5, opacity: 0 }}
+                                            transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1] }}
+                                        />
+                                    )}
                                 </Link>
                             </motion.div>
                             <motion.div layout onHoverStart={() => setPathname("/tentang-kami")} onHoverEnd={() => setPathname(location.pathname)}>
@@ -47,10 +57,10 @@ export default function Navbarss() {
                         <div />
                         <div />
                         <div className="flex items-center gap-4">
-                            {/* <Link className="text-font-primary text-base" to={"/login"}>
+                            <Link className="text-font-primary text-base" to={"/login"}>
                                 Masuk
-                            </Link> */}
-                            <Link className="bg-green-primary flex h-10 items-center rounded-lg px-5.5 font-medium text-white" to={"/deteksi"}>
+                            </Link>
+                            <Link className="bg-green-primary flex h-10 items-center rounded-xl px-5.5 font-medium text-white" to={"/deteksi"}>
                                 Mulai Sekarang
                             </Link>
                         </div>
@@ -60,3 +70,5 @@ export default function Navbarss() {
         </Navbar>
     );
 }
+
+export default Navbars;

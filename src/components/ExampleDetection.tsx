@@ -1,14 +1,15 @@
-import sirih from "@/assets/images/sirih.png";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { ReactFlow, type Node, type Edge, addEdge, type Connection, useNodesState, useEdgesState, Position, Handle } from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
 import { useCallback, useEffect, useRef, useState } from "react";
+
+import "@xyflow/react/dist/style.css";
+import sirih from "@/assets/images/sirih.png";
 
 // Custom node untuk annotation point
 const AnnotationNode = ({ data }: { data: any }) => {
     return (
         <div className="relative">
-            <div className="h-4 w-4 cursor-pointer rounded-full border-2 border-white bg-green-700 shadow-lg transition-colors">
+            <div className="h-4 w-4 cursor-pointer rounded-full border-2 border-white bg-green-700 shadow-md transition-colors">
                 <Handle
                     type="source"
                     position={Position.Right}
@@ -32,7 +33,7 @@ const AnnotationNode = ({ data }: { data: any }) => {
 const InfoNode = ({ data }: { data: any }) => {
     console.log(data);
     return (
-        <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-3 shadow-lg sm:max-w-md sm:p-4 md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl">
+        <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-3 shadow-md sm:max-w-md sm:p-4 md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl">
             <Handle
                 type="target"
                 position={Position.Left}
@@ -205,6 +206,9 @@ const ContohDeteksi = () => {
     const [nodes, _setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, _onEdgesChange] = useEdgesState(initialEdges);
 
+    const sectionRef = useRef(null);
+    const isInView = useInView(sectionRef, { once: true, margin: "-150px" });
+
     const onConnect = useCallback((params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
     // Update container height based on content
@@ -214,10 +218,25 @@ const ContohDeteksi = () => {
     }, [totalHeight, isMobile]);
 
     return (
-        <section className="flex flex-col items-center gap-6 py-18">
-            <div className="flex w-full max-w-7xl flex-col items-center gap-6 px-5">
-                <div className="bg-green-second-light text-green-primary relative inline-flex items-center justify-center overflow-hidden rounded-full px-6 py-2">
-                    <motion.div
+        <motion.section
+            ref={sectionRef}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            variants={{
+                visible: { transition: { staggerChildren: 0.3 } },
+                hidden: {},
+            }}
+            className="flex flex-col items-center gap-6 py-16"
+        >
+            <div className="flex w-full max-w-7xl flex-col items-center gap-2.5 px-5">
+                <motion.div variants={{
+                    hidden: { opacity: 0, y: 40 },
+                    visible: { opacity: 1, y: 0 },
+                }}
+                    transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
+                    className="bg-green-second-light text-green-primary relative inline-flex items-center justify-center overflow-hidden rounded-full px-4 py-1"
+                >
+                    {/* <motion.div
                         className="absolute h-24 w-24 rounded-full bg-gradient-to-r from-green-700 to-transparent"
                         style={{
                             offsetPath: "rect(0px auto auto 0px round 9999px)",
@@ -231,18 +250,31 @@ const ContohDeteksi = () => {
                             ease: "linear",
                         }}
                     />
-                    <div className="bg-green-second-light text-green-primary absolute inset-0.5 rounded-full" />
+                    <div className="bg-green-second-light text-green-primary absolute inset-0.5 rounded-full" /> */}
                     <p className="relative text-lg">Contoh Hasil Deteksi</p>
-                </div>
+                </motion.div>
 
-                <div className="flex flex-col gap-1 text-center">
-                    <div className="text-font-primary text-3xl font-bold">Kenali Tanaman Herbal Populer</div>
+                <motion.div variants={{
+                    hidden: { opacity: 0, y: 40 },
+                    visible: { opacity: 1, y: 0 },
+                }}
+                    transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
+                    className="flex flex-col gap-1 text-center"
+                >
+                    <h5 className="text-font-primary text-3xl font-bold">Kenali Tanaman Herbal Populer</h5>
                     <p className="text-font-primary text-lg font-normal">Beberapa contoh daun yang bisa kamu identifikasi langsung dengan Daunesia.</p>
-                </div>
+                </motion.div>
 
-                <div ref={containerRef} className="relative mt-8 w-full justify-start gap-12 overflow-hidden" style={{ height: `${containerHeight}px` }}>
+                <motion.div ref={containerRef} variants={{
+                    hidden: { opacity: 0, y: 40 },
+                    visible: { opacity: 1, y: 0 },
+                }}
+                    transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
+                    className="relative mt-8 w-full justify-start gap-12 overflow-hidden"
+                    style={{ height: `${containerHeight}px` }}
+                >
                     <div className="relative aspect-square w-full max-w-xs">
-                        <img src={sirih} alt="" className="h-full w-full rounded-lg object-cover" />
+                        <img src={sirih} alt="" className="h-full w-full rounded-lg object-cover shadow-md" />
 
                         <div className="absolute inset-4">
                             <svg width="auto" className="object-cover" height="auto" viewBox="0 0 324 324" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -273,9 +305,9 @@ const ContohDeteksi = () => {
                     </div>
 
                     <div className="absolute inset-0 z-10"></div>
-                </div>
+                </motion.div>
             </div>
-        </section>
+        </motion.section>
     );
 };
 
