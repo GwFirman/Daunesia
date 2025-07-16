@@ -1,12 +1,10 @@
-"use client";
-
 import image_home from "@/assets/images/image_home.png";
 import { Link } from "react-router";
 import { TextGenerateEffect } from "./ui/text-generate-effect";
 import { motion } from "framer-motion";
 import { CardContainer } from "./ui/3d-card";
 
-const hero = () => {
+const Hero = () => {
     return (
         <section className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-12 px-5 py-8">
             <div className="flex flex-1 flex-col-reverse items-center justify-center gap-8 lg:flex-row lg:justify-between">
@@ -60,4 +58,4 @@ const hero = () => {
     );
 };
 
-export default hero;
+export default Hero;

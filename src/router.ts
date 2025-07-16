@@ -8,7 +8,7 @@ export type Path =
   | `/deteksi`
   | `/login`
   | `/register`
-  | `/tentangkami`
+  | `/tentang-kami`
   | `/test`
 
 export type Params = {

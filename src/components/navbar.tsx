@@ -1,4 +1,4 @@
-import Daunesia from "@/assets/logo/LogoDaunesia.png";
+import Daunesia from "@/assets/icons/logo/LogoDaunesia.png";
 import { Link, useLocation } from "react-router";
 import { Navbar, NavBody } from "./ui/resizable-navbar";
 import { motion } from "framer-motion";
@@ -30,10 +30,10 @@ export default function Navbarss() {
                                     {pathname === "/" && <motion.div layoutId="navbar-2" className="absolute h-[1.8px] w-full rounded-md bg-black" transition={{ type: "spring", duration: 1 }} />}
                                 </Link>
                             </motion.div>
-                            <motion.div layout onHoverStart={() => setPathname("/tentangkami")} onHoverEnd={() => setPathname(location.pathname)}>
-                                <Link className="relative" to={"/tentangkami"}>
+                            <motion.div layout onHoverStart={() => setPathname("/tentang-kami")} onHoverEnd={() => setPathname(location.pathname)}>
+                                <Link className="relative" to={"/tentang-kami"}>
                                     <p className="relative">Tentang Kami</p>
-                                    {pathname === "/tentangkami" && <motion.div layoutId="navbar-2" className="absolute h-[1.8px] w-full rounded-md bg-black" transition={{ type: "spring", duration: 1 }} />}
+                                    {pathname === "/tentang-kami" && <motion.div layoutId="navbar-2" className="absolute h-[1.8px] w-full rounded-md bg-black" transition={{ type: "spring", duration: 1 }} />}
                                 </Link>
                             </motion.div>
                             <motion.div layout onHoverStart={() => setPathname("/deteksi")} onHoverEnd={() => setPathname(location.pathname)}>
