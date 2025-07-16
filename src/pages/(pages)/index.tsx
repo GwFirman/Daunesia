@@ -1,10 +1,10 @@
 import Hero from "@/components/hero";
-import ContohDeteksi from "@/components/detection-example";
-import Steps from "@/components/steps";
-import Feature from "@/components/feature";
+import ContohDeteksi from "@/components/ExampleDetection";
+import Steps from "@/components/Step";
+import Feature from "@/components/Ourfeature";
 import ChooseUs from "@/components/chooseUs";
 
-export default function Home() {
+export default function HomePage() {
     return (
         <>
             <Hero />
