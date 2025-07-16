@@ -1,4 +1,4 @@
-import Daunesia from "@/assets/logo/LogoDaunesia.png";
+import Daunesia from "@/assets/icons/logo/LogoDaunesia.png";
 import { Link, useLocation } from "react-router";
 import { Navbar, NavBody } from "./ui/resizable-navbar";
 import { motion } from "framer-motion";
