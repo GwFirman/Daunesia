@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 
 import image_login from "@/assets/images/image_login.png";
-import Daunesia from "@/assets/logo/LogoDaunesia.svg";
+import Daunesia from "@/assets/icons/logo/LogoDaunesia.svg";
 
 export default function Login() {
     return (

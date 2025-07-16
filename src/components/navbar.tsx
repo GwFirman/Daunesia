@@ -1,4 +1,4 @@
-import Daunesia from "@/assets/logo/LogoDaunesia.svg";
+import Daunesia from "@/assets/icons/logo/LogoDaunesia.svg";
 import { Link } from "react-router";
 
 export default function Navbar() {
@@ -16,7 +16,7 @@ export default function Navbar() {
                             </Link>
                         </li>
                         <li>
-                            <Link className="relative pb-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full" to={"/tentangkami"}>
+                            <Link className="relative pb-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full" to={"/tentang-kami"}>
                                 Tentang Kami
                             </Link>
                         </li>

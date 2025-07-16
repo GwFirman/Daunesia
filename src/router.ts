@@ -5,8 +5,10 @@ import { components, hooks, utils } from '@generouted/react-router/client'
 
 export type Path =
   | `/`
+  | `/deteksi`
   | `/login`
   | `/register`
+  | `/tentang-kami`
 
 export type Params = {
   

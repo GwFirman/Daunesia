@@ -2,9 +2,9 @@ import HasilDeteksi from "@/assets/images/hasilDeteksi.svg";
 
 const ContohDeteksi = () => {
     return (
-        <section className="flex flex-col items-center gap-6 py-18">
-            <div className="flex w-full max-w-7xl flex-col items-center gap-6 px-5">
-                <div className="bg-green-second-light text-green-primary inline-flex items-center justify-center rounded-full px-6 py-2">
+        <section className="flex flex-col items-center gap-6 py-12">
+            <div className="flex w-full max-w-7xl flex-col items-center gap-3 px-5">
+                <div className="bg-green-second-light text-green-primary inline-flex items-center justify-center rounded-full px-4 py-1">
                     <p className="text-lg">Contoh Hasil Deteksi</p>
                 </div>
 
@@ -14,7 +14,7 @@ const ContohDeteksi = () => {
                 </div>
 
                 <div className="mt-8 flex w-full justify-start">
-                    <img src={HasilDeteksi} alt="" className="h-115" />
+                    <img src={HasilDeteksi} alt="" className="h-100" draggable={false} />
                 </div>
             </div>
         </section>
