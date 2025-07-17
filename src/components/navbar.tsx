@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 
 import Daunesia from "@/assets/icons/logo/LogoDaunesia.png";
 import { usePathname } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const Navbars = () => {
 	const [pathname, setPathname] = useState("");
 
 	const p = usePathname();
 	const location = { pathname: p };
+	const { data } = authClient.useSession();
 
 	useEffect(() => {
 		if (location.pathname) {
@@ -54,9 +56,15 @@ const Navbars = () => {
 						<div />
 						<div />
 						<div className="flex items-center gap-4">
-							<Link className="text-font-primary relative text-base" href={"/login"}>
-								<p className="relative">Masuk</p>
-							</Link>
+							{data ? (
+								<div className="text-font-primary relative text-base cursor-pointer" onClick={() => authClient.signOut()}>
+									<p className="relative">Keluar</p>
+								</div>
+							) : (
+								<Link className="text-font-primary relative text-base" href={"/login"}>
+									<p className="relative">Masuk</p>
+								</Link>
+							)}
 							<Link className="bg-green-primary flex h-10 items-center rounded-xl px-5.5 font-medium text-white" href={"/deteksi"}>
 								Mulai Sekarang
 							</Link>
@@ -85,9 +93,15 @@ const Navbars = () => {
 						{location.pathname === "/deteksi" && <motion.div layoutId="mobile-navbar-indicator" className="absolute h-[1.8px] w-full rounded-md bg-black" transition={{ type: "spring", duration: 1 }} />}
 					</Link>
 					<div className="mt-4 flex w-full flex-col gap-4">
-						<NavbarButton variant="secondary" className="w-full" onClick={() => setTimeout(() => setIsMobileMenuOpen(false), 700)}>
-							Masuk
-						</NavbarButton>
+						{data ? (
+							<NavbarButton variant="secondary" className="w-full" onClick={() => setTimeout(() => setIsMobileMenuOpen(false), 700)}>
+								Keluar
+							</NavbarButton>
+						) : (
+							<NavbarButton variant="secondary" className="w-full" onClick={() => setTimeout(() => setIsMobileMenuOpen(false), 700)}>
+								Masuk
+							</NavbarButton>
+						)}
 						<NavbarButton variant="primary" className="bg-green-primary w-full" onClick={() => setTimeout(() => setIsMobileMenuOpen(false), 700)}>
 							Mulai Sekarang
 						</NavbarButton>

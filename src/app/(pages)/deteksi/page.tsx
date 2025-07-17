@@ -53,7 +53,7 @@ export default function DeteksiPage() {
 
 						{/* Search Input */}
 						<div className="relative my-2.5">
-							<img src={searchIcons} alt="" className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
+							<img src={searchIcons.src} alt="" className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2" />
 							<input type="text" placeholder="Cari berdasarkan nama tanaman" className="w-full h-9 pl-9 pr-3 bg-neutral-100 rounded-lg border text-font-primary border-zinc-800/40 focus:outline-none" />
 						</div>
 
@@ -66,7 +66,7 @@ export default function DeteksiPage() {
 
 					{/* Accuracy Label */}
 					<motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="text-center max-w-max text-sm bg-white p-2 rounded-lg shadow-md flex items-center gap-2">
-						<img src={accurationIcons} alt="Akurasi" className="h-5 w-5" />
+						<img src={accurationIcons.src} alt="Akurasi" className="h-5 w-5" />
 						<p className="text-font-primary text-sm font-semibold">98% Akurat.</p>
 					</motion.div>
 				</motion.div>
@@ -74,7 +74,7 @@ export default function DeteksiPage() {
 				{/* Right Column */}
 				<motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="flex w-full flex-col gap-4 lg:w-5/8">
 					<h3 className="text-font-primary text-2xl font-bold">Tanaman Herbal yang Dapat Dikenali</h3>
-					<img src={contohDeteksi} alt="" height={500} />
+					<img src={contohDeteksi.src} alt="" height={500} />
 				</motion.div>
 			</motion.section>
 		</motion.div>
