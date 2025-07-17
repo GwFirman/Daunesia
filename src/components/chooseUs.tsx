@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import { Cover } from "@/components/ui/cover";
 import { motion } from "framer-motion";
 
 import chooseUsImg from "@/assets/images/chooseUs.png";
@@ -13,7 +12,7 @@ const chooseUs = () => {
                     <motion.img src={chooseUsImg} alt="Steps" className="w-full max-w-xl" draggable={false} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1], delay: 0.3 }} />
                 </div>
 
-                {/* Rigth Section */}
+                {/* Right Section */}
                 <div className="flex w-full flex-col gap-2.5 lg:w-2/4">
                     <div className="flex flex-row items-start justify-between">
                         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1] }} className="bg-green-second-light text-green-primary inline-flex max-w-max items-center justify-center rounded-full px-4 py-1">

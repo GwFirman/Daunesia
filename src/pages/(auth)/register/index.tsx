@@ -1,16 +1,46 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade } from "swiper/modules";
+import { motion } from "framer-motion"; // Import motion dari framer-motion
 
-import image_login from "@/assets/images/image_login.png";
+import 'swiper/css';
+import 'swiper/css/effect-fade';
+
 import Daunesia from "@/assets/icons/logo/LogoDaunesia.png";
+import carousel1 from "@/assets/images/crousel1.png";
+import carousel2 from "@/assets/images/crousel2.png";
+import carousel3 from "@/assets/images/crousel3.png";
+
+const carouselData = [
+    {
+        image: carousel1
+    },
+    {
+        image: carousel2
+    },
+    {
+        image: carousel3
+    }
+]
 
 export default function Register() {
     return (
-        <div className="flex h-screen max-w-screen bg-neutral-100">
+        <motion.div
+            className="flex h-screen max-w-screen bg-neutral-100"
+            initial={{ opacity: 0 }} // Hanya fade in untuk kontainer utama
+            animate={{ opacity: 1 }}   // Animate ke opasitas penuh
+            transition={{ duration: 0.6, ease: 'easeOut' }} // Transisi halus untuk kontainer
+        >
             <div className="max-w-8xl mx-auto flex w-full flex-row gap-4">
                 {/* Left Panel */}
-                <div className="flex flex-1 p-5">
+                <motion.div // Menggunakan motion.div untuk animasi
+                    className="flex flex-1 p-5"
+                    initial={{ opacity: 0, scale: 0.95 }} // Mulai sedikit lebih kecil dan tidak terlihat
+                    animate={{ opacity: 1, scale: 1 }}   // Membesar ke ukuran asli dan memudar masuk
+                    transition={{ delay: 0.15, duration: 0.7, ease: 'easeOut' }} // Delay untuk efek staggered
+                >
                     <div className="flex flex-1 flex-col rounded-2xl bg-white p-4">
                         <div className="flex flex-row items-center">
                             <img src={Daunesia} alt="Logo Daunesia" className="h-12" />
@@ -113,13 +143,35 @@ export default function Register() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Right Panel */}
-                <div className="-ml-10 hidden w-full max-w-md p-5 lg:flex">
-                    <img className="flex-1 rounded-xl object-cover" src={image_login} alt="Login Illustration" />
-                </div>
+                <motion.div // Menggunakan motion.div untuk animasi
+                    className="-ml-10 hidden w-full max-w-md p-5 lg:flex"
+                    initial={{ opacity: 0, scale: 0.95 }} // Mulai sedikit lebih kecil dan tidak terlihat
+                    animate={{ opacity: 1, scale: 1 }}   // Membesar ke ukuran asli dan memudar masuk
+                    transition={{ delay: 0.35, duration: 0.7, ease: 'easeOut' }} // Delay lebih besar untuk efek staggered
+                >
+                    <Swiper
+                        modules={[Autoplay, EffectFade]}
+                        effect="fade"
+                        loop={true}
+                        autoplay={{
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        }}
+                        className="w-full h-full rounded-2xl"
+                    >
+                        {carouselData.map((slide, idx) => (
+                            <SwiperSlide key={idx}>
+                                <div className="relative h-full w-full">
+                                    <img src={slide.image} className="h-full w-full scale-105 object-cover transition-transform duration-1000 ease-in-out" style={{ filter: "brightness(0.85)" }} />
+                                </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
     );
 }
