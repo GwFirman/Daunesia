@@ -22,7 +22,7 @@ const chooseUs = () => {
                     </div>
                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.6, delay: 0.2, ease: [0.42, 0, 0.58, 1] }} className="flex flex-col gap-1 text-start">
                         <div className="text-font-primary text-3xl font-bold">
-                            Mulailah <Cover>Petualangan</Cover> Herbalmu Hari Ini
+                            Mulailah Petualangan Herbalmu Hari Ini
                         </div>
                         <p className="text-font-primary text-lg">Bergabunglah bersama ribuan orang yang belajar mengenal tanaman herbal Indonesia lewat Daunesia.</p>
                     </motion.div>

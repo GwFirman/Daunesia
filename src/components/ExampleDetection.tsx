@@ -226,59 +226,44 @@ const ContohDeteksi = () => {
                 visible: { transition: { staggerChildren: 0.3 } },
                 hidden: {},
             }}
-            className="flex flex-col items-center gap-6 py-16"
+            className="flex flex-col items-center gap-6 py-16 overflow-hidden"
         >
-            <div className="flex w-full max-w-7xl flex-col items-center gap-2.5 px-5">
+            <div className="-mb-38 flex w-full max-w-7xl flex-col items-center gap-2.5 px-5">
                 <motion.div
                     variants={{
-                        hidden: { opacity: 0, y: 40 },
+                        hidden: { opacity: 0, y: 20 },
                         visible: { opacity: 1, y: 0 },
                     }}
-                    transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
+                    transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1] }}
                     className="bg-green-second-light text-green-primary relative inline-flex items-center justify-center overflow-hidden rounded-full px-4 py-1"
                 >
-                    {/* <motion.div
-                        className="absolute h-24 w-24 rounded-full bg-gradient-to-r from-green-700 to-transparent"
-                        style={{
-                            offsetPath: "rect(0px auto auto 0px round 9999px)",
-                            offsetDistance: "0%",
-                            offsetRotate: "0deg",
-                        }}
-                        animate={{ offsetDistance: ["0%", "100%"], rotate: [360, 0] }}
-                        transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "linear",
-                        }}
-                    />
-                    <div className="bg-green-second-light text-green-primary absolute inset-0.5 rounded-full" /> */}
                     <p className="relative text-lg">Contoh Hasil Deteksi</p>
                 </motion.div>
 
                 <motion.div
                     variants={{
-                        hidden: { opacity: 0, y: 40 },
+                        hidden: { opacity: 0, y: 20 },
                         visible: { opacity: 1, y: 0 },
                     }}
-                    transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
+                    transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1], delay: 0.1 }}
                     className="flex flex-col gap-1 text-center"
                 >
                     <h5 className="text-font-primary text-3xl font-bold">Kenali Tanaman Herbal Populer</h5>
                     <p className="text-font-primary text-lg font-normal">Beberapa contoh daun yang bisa kamu identifikasi langsung dengan Daunesia.</p>
                 </motion.div>
 
-                <div className="-mb-32 w-full overflow-x-auto">
+                <div className="w-full">
                     <motion.div
                         ref={containerRef}
                         variants={{
-                            hidden: { opacity: 0, y: 40 },
+                            hidden: { opacity: 0, y: 30 },
                             visible: { opacity: 1, y: 0 },
                         }}
-                        transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
-                        className="relative mt-8 w-4xl shrink-0 flex-nowrap justify-start gap-12 overflow-hidden md:w-full"
+                        transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1], delay: 0.2 }}
+                        className="relative mt-8 w-full overflow-hidden"
                         style={{ height: `${containerHeight}px` }}
                     >
-                        <div className="relative aspect-square w-full max-w-xs">
+                        <div className="relative aspect-square w-full max-w-xs mx-auto md:mx-0">
                             <img src={sirih} alt="" className="h-full w-full rounded-lg object-cover shadow-md" />
 
                             <div className="absolute inset-4">
@@ -296,7 +281,6 @@ const ContohDeteksi = () => {
                                 elementsSelectable={false}
                                 panOnDrag={false}
                                 zoomOnScroll={false}
-                                // zoomOnPinch={false}
                                 zoomOnDoubleClick={false}
                                 nodes={nodes}
                                 edges={edges}
