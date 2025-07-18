@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import { motion } from "motion/react";
-import { authClient } from "@/lib/auth-client"; // pastikan path ini sesuai
+import { authClient } from "@/lib/auth-client";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -24,6 +24,8 @@ export default function Register() {
 	const [username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [loadingProvider, setLoadingProvider] = useState<null | "google" | "facebook">(null);
+
 	const router = useRouter();
 
 	const handleRegister = async () => {
@@ -50,8 +52,6 @@ export default function Register() {
 	if (data) {
 		redirect("/");
 	}
-
-	// if (isPending) return null;
 
 	return (
 		<motion.div className="flex h-screen max-w-screen bg-neutral-100" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, ease: "easeOut" }}>
@@ -89,7 +89,6 @@ export default function Register() {
 									<div className="text-font-primary text-sm font-medium">Password</div>
 									<div className="relative">
 										<Input type="password" placeholder="Masukan password kamu" value={password} onChange={(e) => setPassword(e.target.value)} className="placeholder:text-font-secondary text-font-primary h-10 rounded-lg border-2 border-zinc-800/40 bg-white px-4" />
-										<div className="absolute top-4 right-4">{/* Eye SVG */}</div>
 									</div>
 								</div>
 
@@ -108,29 +107,43 @@ export default function Register() {
 								</div>
 
 								<div className="flex w-full flex-col gap-4 lg:flex-row">
+									{/* Google */}
 									<div
 										onClick={async () => {
+											setLoadingProvider("google");
 											await authClient.signIn.social({
 												provider: "google",
 												callbackURL: "/deteksi",
 											});
+											setLoadingProvider(null);
 										}}
-										className="flex cursor-pointer h-12 w-full items-center justify-center rounded-lg border-2 border-zinc-800/40 bg-white"
+										className="flex cursor-pointer h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-zinc-800/40 bg-white"
 									>
-										<div className="mr-2">{/* Google SVG */}</div>
-										<div className="text-font-primary font-medium">Google</div>
+										<svg className="h-5 w-5" viewBox="0 0 48 48">
+											<path fill="#fbc02d" d="M43.6 20.5H42V20H24v8h11.3C33.3 32.3 29.1 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.3 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-9 20-20 0-1.3-.1-2.7-.4-3.5z" />
+											<path fill="#e53935" d="M6.3 14.6l6.6 4.8C14.4 16.2 18.9 14 24 14c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.3 29.6 4 24 4c-7.3 0-13.6 3.9-17.1 9.6z" />
+											<path fill="#4caf50" d="M24 44c5.1 0 9.9-1.9 13.5-5.1l-6.2-5.2C29.6 35.7 26.9 37 24 37c-5 0-9.2-3.3-10.7-7.9l-6.6 5.1C10.3 39.6 16.7 44 24 44z" />
+											<path fill="#1565c0" d="M43.6 20.5H42V20H24v8h11.3c-1.1 3.1-3.3 5.7-6.1 7.2l6.2 5.2c-0.4 0.3 6.6-4.8 6.6-13.9 0-1.3-.1-2.7-.4-3.5z" />
+										</svg>
+										<div className="text-font-primary font-medium">{loadingProvider === "google" ? "Loading..." : "Google"}</div>
 									</div>
+
+									{/* Facebook */}
 									<div
 										onClick={async () => {
+											setLoadingProvider("facebook");
 											await authClient.signIn.social({
 												provider: "facebook",
 												callbackURL: "/deteksi",
 											});
+											setLoadingProvider(null);
 										}}
-										className="flex h-12 w-full items-center justify-center rounded-lg border-2 border-zinc-800/40 bg-white"
+										className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-zinc-800/40 bg-white"
 									>
-										<div className="mr-2">{/* Facebook SVG */}</div>
-										<div className="text-font-primary font-medium">Facebook</div>
+										<svg className="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+											<path d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.404.597 24 1.326 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.31h3.587l-.467 3.622h-3.12V24h6.116C23.403 24 24 23.403 24 22.674V1.326C24 .597 23.403 0 22.675 0z" />
+										</svg>
+										<div className="text-font-primary font-medium">{loadingProvider === "facebook" ? "Loading..." : "Facebook"}</div>
 									</div>
 								</div>
 							</div>
