@@ -2,12 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import axios from "axios";
+import Image from "next/image";
 
 import contohDeteksi from "@/assets/images/contohDeteksi.svg";
 import _searchIcons from "@/assets/icons/searchIcons.svg";
 import accurationIcons from "@/assets/icons/accurationIcons.svg";
-import axios from "axios";
-import Image from "next/image";
+import Contoh1 from "@/assets/images/contoh1.jpg";
+import Contoh2 from "@/assets/images/contoh2.jpg";
+import Contoh3 from "@/assets/images/contoh3.jpg";
+
 
 export interface ApiResponse {
 	success: boolean;
@@ -41,8 +45,15 @@ export interface Confidence {
 	confidence: number;
 }
 
+const contohImages = [
+	{ imgSrc: Contoh1.src, name: "Contoh1.jpg" },
+	{ imgSrc: Contoh2.src, name: "Contoh2.jpg" },
+	{ imgSrc: Contoh3.src, name: "Contoh3.jpg" }
+];
+
 export default function DeteksiPage() {
 	const [mounted, setMounted] = useState(false);
+	const [isDragging, setIsDragging] = useState(false);
 	const [file, setfile] = useState<File | null>(null);
 	const [result, setResult] = useState<Result | null>(null);
 	const [plantDescription, setPlantDescription] = useState<string>("");
@@ -132,6 +143,13 @@ export default function DeteksiPage() {
 		setUploadProgress(0);
 	}
 
+	const handleClickContoh = async (imgSrc: string, name: string) => {
+		const response = await fetch(imgSrc);
+		const blob = await response.blob();
+		const exampleFile = new File([blob], name, { type: blob.type });
+		setfile(exampleFile);
+	};
+
 	useEffect(() => {
 		const timeout = setTimeout(() => setMounted(true), 100); // delay agar tidak abrupt
 		// Check remaining trials on component mount
@@ -140,7 +158,7 @@ export default function DeteksiPage() {
 	}, []);
 
 	return (
-		<motion.div initial={{ opacity: 0, y: 40 }} animate={mounted ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }} className="mx-auto max-w-7xl w-full px-4 py-16">
+		<motion.section initial={{ opacity: 0, y: 40 }} animate={mounted ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }} className="mx-auto max-w-7xl w-full px-4 py-16">
 			{/* Header */}
 			<motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="flex w-full flex-col items-center gap-3 px-5">
 				<div className="flex flex-col gap-1 text-center">
@@ -150,35 +168,111 @@ export default function DeteksiPage() {
 			</motion.div>
 
 			{/* Deteksi Section */}
-			<motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }} className="mx-auto max-w-7xl flex flex-col-reverse gap-12 p-6 lg:flex-row lg:gap-20 rounded-2xl bg-gradient-to-r from-[#E7F3E7] to-[#B5D6B3] my-12">
+			<motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }} className="mx-auto max-w-7xl flex flex-col-reverse gap-12 p-6 lg:flex-row lg:gap-20 rounded-2xl bg-gradient-to-r from-[#E7F3E7] to-[#B5D6B3] my-12">
 				{/* Left Column */}
 				<motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="flex w-full flex-col gap-4 lg:w-2/6">
 					<div className="bg-white p-6 rounded-xl shadow-lg">
 						{file ? (
 							<div className="border-green-primary flex p-2 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed">
-								<Image width={320} className="object-cover rounded-md max-h-64" height={0} alt="Gambar yang diunggah" src={URL.createObjectURL(file)} />
+								<Image
+									width={320}
+									className="object-cover rounded-md max-h-64"
+									height={0}
+									alt="Gambar yang diunggah"
+									src={URL.createObjectURL(file)}
+								/>
 								<p className="text-green-secondary text-sm font-medium">{file.name}</p>
 							</div>
 						) : (
-							<motion.label htmlFor="file" className="border-green-primary flex h-70 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed cursor-pointer hover:border-green-secondary transition-colors">
-								<svg width="70" height="70" viewBox="0 0 98 98" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path d="M10.2084 46.9583V14.2083C10.2084 11.9992 11.9992 10.2083 14.2084 10.2083H83.7917C86.0008 10.2083 87.7917 11.9992 87.7917 14.2083V83.7917C87.7917 86.0008 86.0008 87.7917 83.7917 87.7917H14.2084C11.9992 87.7917 10.2084 86.0008 10.2084 83.7917V63.2917" stroke="#537D5D" strokeWidth="4.5" strokeLinecap="round" />
-									<path d="M16.3334 53.0833L28.9305 40.4862C29.8129 39.6038 31.2788 39.736 31.9891 40.7619L47.7665 63.5506C48.4312 64.5106 49.7735 64.6995 50.6773 63.9601L70.0575 48.104C70.8528 47.4533 72.0117 47.5111 72.7382 48.2377L87.7917 63.2917" stroke="#537D5D" strokeWidth="4.5" strokeLinecap="round" />
-									<circle cx="67.375" cy="30.625" r="6.125" fill="#537D5D" stroke="#537D5D" strokeWidth="4.5" strokeLinecap="round" />
+							<motion.div
+								onDragOver={(e) => {
+									e.preventDefault();
+									setIsDragging(true);
+								}}
+								onDragLeave={() => setIsDragging(false)}
+								onDrop={(e) => {
+									e.preventDefault();
+									setIsDragging(false);
+									const droppedFile = e.dataTransfer.files?.[0];
+									if (droppedFile) {
+										if (!droppedFile.type.startsWith("image/")) {
+											alert("Hanya file gambar yang diperbolehkan.");
+											return;
+										}
+										if (droppedFile.size > 2 * 1024 * 1024) {
+											alert("Ukuran file maksimal 2MB.");
+											return;
+										}
+										setfile(droppedFile);
+									}
+								}}
+								className={`${isDragging ? "border-green-600 bg-green-50" : "border-green-primary"
+									} flex h-70 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed transition-all duration-200`}
+							>
+								<svg
+									width="70"
+									height="70"
+									viewBox="0 0 98 98"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="M10.2084 46.9583V14.2083C10.2084 11.9992 11.9992 10.2083 14.2084 10.2083H83.7917C86.0008 10.2083 87.7917 11.9992 87.7917 14.2083V83.7917C87.7917 86.0008 86.0008 87.7917 83.7917 87.7917H14.2084C11.9992 87.7917 10.2084 86.0008 10.2084 83.7917V63.2917"
+										stroke="#537D5D"
+										strokeWidth="4.5"
+										strokeLinecap="round"
+									/>
+									<path
+										d="M16.3334 53.0833L28.9305 40.4862C29.8129 39.6038 31.2788 39.736 31.9891 40.7619L47.7665 63.5506C48.4312 64.5106 49.7735 64.6995 50.6773 63.9601L70.0575 48.104C70.8528 47.4533 72.0117 47.5111 72.7382 48.2377L87.7917 63.2917"
+										stroke="#537D5D"
+										strokeWidth="4.5"
+										strokeLinecap="round"
+									/>
+									<circle
+										cx="67.375"
+										cy="30.625"
+										r="6.125"
+										fill="#537D5D"
+										stroke="#537D5D"
+										strokeWidth="4.5"
+										strokeLinecap="round"
+									/>
 								</svg>
-								<div className="inline-flex flex-col items-start justify-start">
-									<div className="flex flex-col items-center justify-start self-stretch">
-										<input onChange={(e) => e.target.files?.[0] && setfile(e.target.files[0])} type="file" id="file" className="hidden" accept="image/*" />
-										<div className="text-green-secondary justify-center text-center leading-tight font-medium">Unggah gambar tanaman</div>
+
+								<div className="inline-flex flex-col items-center justify-start">
+									<div className="text-green-secondary text-center font-medium">
+										Unggah gambar tanaman
 									</div>
-									<div className="flex flex-col items-center justify-start self-stretch">
-										<div className="justify-center text-center">
-											<span className="text-green-secondary text-sm leading-none font-normal">Seret atau </span>
-											<span className="text-green-secondary text-sm leading-none font-bold">unggah gambar</span>
-										</div>
+									<div className="text-center text-green-secondary text-sm">
+										Seret atau{" "}
+										<label
+											htmlFor="file"
+											className="font-medium hover:text-green-primary hover:underline transition-colors duration-200 cursor-pointer"
+										>
+											unggah gambar
+										</label>
 									</div>
+									<input
+										onChange={(e) => {
+											const selectedFile = e.target.files?.[0];
+											if (!selectedFile) return;
+											if (!selectedFile.type.startsWith("image/")) {
+												alert("Hanya file gambar yang diperbolehkan.");
+												return;
+											}
+											if (selectedFile.size > 2 * 1024 * 1024) {
+												alert("Ukuran file maksimal 2MB.");
+												return;
+											}
+											setfile(selectedFile);
+										}}
+										type="file"
+										id="file"
+										className="hidden"
+										accept="image/*"
+									/>
 								</div>
-							</motion.label>
+							</motion.div>
 						)}
 
 						{/* Progress Bar */}
@@ -200,7 +294,7 @@ export default function DeteksiPage() {
 
 						{/* Buttons */}
 						<div className="flex gap-2 mt-4">
-							<button onClick={resetDeteksi} disabled={isLoading} className="cursor-pointer flex-1 flex items-center justify-center gap-2 rounded-full bg-green-secondary px-5 py-2 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-600 transition-colors">
+							<button onClick={resetDeteksi} disabled={isLoading} className="cursor-pointer flex-1 flex items-center justify-center gap-2 rounded-full bg-green-secondary px-5 py-2 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-primary transition-colors">
 								Bersihkan
 							</button>
 							<button onClick={mulaiDeteksi} disabled={!file || isLoading || (!isLoggedIn && remainingTrials === 0)} className="flex-1 cursor-pointer flex items-center justify-center gap-2 rounded-full border-2 border-green-secondary bg-white px-5 py-2 text-green-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-50 transition-colors">
@@ -210,47 +304,104 @@ export default function DeteksiPage() {
 
 						{/* Login Suggestion */}
 						{!isLoggedIn && remainingTrials !== null && remainingTrials <= 2 && (
-							<div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-								<p className="text-blue-700 text-sm text-center">
+							<div className="mt-3 p-3 bg-green-50 border border-green-light rounded-lg">
+								<p className="text-green-primary text-sm text-center">
 									💡 <strong>Tips:</strong> Login untuk mendapatkan percobaan tak terbatas dan fitur premium lainnya!
 								</p>
 							</div>
 						)}
 					</div>
 
-					{/* Accuracy Label */}
-					<motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="text-center max-w-max text-sm bg-white p-2 rounded-lg shadow-md flex items-center gap-2">
-						<img src={accurationIcons.src} alt="Akurasi" className="h-5 w-5" />
-						<p className="text-font-primary text-sm font-semibold">98% Akurat.</p>
-					</motion.div>
-
-					{/* Remaining Trials Counter */}
-					{!isLoggedIn && remainingTrials !== null && (
-						<motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="text-center max-w-max text-sm bg-white p-3 rounded-lg shadow-md border-l-4 border-green-secondary">
-							<div className="flex items-center gap-2 mb-1">
-								<svg className="w-4 h-4 text-green-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-								</svg>
-								<p className="text-font-primary text-sm font-semibold">Percobaan Tersisa: {remainingTrials}</p>
+					<div className="bg-white p-4 rounded-xl shadow-lg">
+						<div className="flex flex-col">
+							<h6 className="text-sm mb-2">Contoh Tanaman</h6>
+							<div className="flex flex-row gap-2">
+								{contohImages.map((img, i) => (
+									<img
+										key={i}
+										src={img.imgSrc}
+										alt=""
+										width={114}
+										onClick={() => handleClickContoh(img.imgSrc, img.name)}
+										className="cursor-pointer hover:scale-102 transition-transform rounded-sm"
+									/>
+								))}
 							</div>
-							{remainingTrials === 0 && <p className="text-red-600 text-xs">Limit tercapai. Silakan login untuk melanjutkan.</p>}
-							{remainingTrials > 0 && remainingTrials <= 2 && <p className="text-orange-600 text-xs">Segera login untuk percobaan lebih banyak.</p>}
-						</motion.div>
-					)}
+						</div>
+					</div>
 
-					{/* Login Prompt for Unlimited Access */}
-					{isLoggedIn && (
-						<motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="text-center max-w-max text-sm bg-green-50 p-3 rounded-lg shadow-md border-l-4 border-green-secondary">
-							<div className="flex items-center gap-2">
-								<svg className="w-4 h-4 text-green-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-								</svg>
-								<p className="text-green-secondary text-sm font-semibold">Akses Tidak Terbatas</p>
-							</div>
+
+					{/* Label Akurasi, Sisa Percobaan, dan Akses Login */}
+					<div className="flex flex-row flex-wrap gap-3">
+
+						{/* Remaining Trials Counter (Non-Logged-in) */}
+						{!isLoggedIn && remainingTrials !== null && (
+							<motion.div
+								initial={{ opacity: 0, y: 10 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true }}
+								transition={{ duration: 0.5, delay: 0.3 }}
+								className="rounded-lg border-l-4 border-green-secondary bg-white p-3 text-sm shadow-md max-w-max text-center"
+							>
+								<div className="flex items-center gap-2">
+									<svg className="h-5 w-5 text-green-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+									</svg>
+									<p className="text-font-primary font-semibold">
+										Percobaan Tersisa: {remainingTrials}
+									</p>
+								</div>
+
+								{remainingTrials === 0 && (
+									<p className="text-xs text-red-600">
+										Limit tercapai. Silakan login untuk melanjutkan.
+									</p>
+								)}
+
+								{remainingTrials > 0 && remainingTrials <= 2 && (
+									<p className="text-xs text-orange-600">
+										Segera login untuk percobaan lebih banyak.
+									</p>
+								)}
+							</motion.div>
+						)}
+
+						{/* Logged-in Success Message */}
+						{isLoggedIn && (
+							<motion.div
+								initial={{ opacity: 0, y: 10 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true }}
+								transition={{ duration: 0.5, delay: 0.3 }}
+								className="rounded-lg border-l-4 border-green-secondary bg-green-50 p-3 text-sm shadow-md max-w-max text-center"
+							>
+								<div className="flex items-center gap-2">
+									<svg className="h-5 w-5 text-green-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+									</svg>
+									<p className="text-sm font-semibold text-green-secondary">
+										Akses Tidak Terbatas
+									</p>
+								</div>
+							</motion.div>
+						)}
+
+						{/* Accuracy Label */}
+						<motion.div
+							initial={{ opacity: 0, y: 10 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+							className="flex items-center gap-2 rounded-lg bg-white p-2 text-sm shadow-md max-w-max text-center"
+						>
+							<img src={accurationIcons.src} alt="Akurasi" className="h-5 w-5" />
+							<p className="text-font-primary font-semibold">98% Akurat.</p>
 						</motion.div>
-					)}
+
+
+					</div>
+
 				</motion.div>
-
 				{/* Right Column */}
 				<AnimatePresence mode="wait">
 					{!result && (
@@ -303,7 +454,7 @@ export default function DeteksiPage() {
 						</motion.div>
 					)}
 				</AnimatePresence>
-			</motion.section>
-		</motion.div>
+			</motion.div>
+		</motion.section>
 	);
 }

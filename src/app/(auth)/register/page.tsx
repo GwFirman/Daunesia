@@ -58,14 +58,14 @@ export default function Register() {
 			<div className="max-w-8xl mx-auto flex w-full flex-row gap-4">
 				<motion.div className="flex flex-1 p-5" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15, duration: 0.7, ease: "easeOut" }}>
 					<div className="flex flex-1 flex-col rounded-2xl bg-white p-4">
-						<div className="flex flex-row items-center">
-							<img src={Daunesia.src} alt="Logo Daunesia" className="h-12" />
-							<div className="text-font-primary mr-4 ml-auto font-medium">
-								<p className="hidden lg:inline">{"Sudah punya akun? "}</p>
+						<div className="flex flex-row items-center m-2">
+							<motion.img animate={{ opacity: [0, 1] }} transition={{ duration: 1.2 }} src={Daunesia.src} alt="Logo Daunesia" className="h-8" />
+							<motion.div animate={{ x: [20, 0], opacity: [0, 1] }} transition={{ duration: 0.8, delay: 0.2 }} className="text-font-primary mr-4 ml-auto font-medium">
+								<p className="hidden lg:inline">{"Belum ada akun? "}</p>
 								<Link href={"/login"} className="text-green-primary hover:underline">
 									Masuk
 								</Link>
-							</div>
+							</motion.div>
 						</div>
 
 						<div className="mt-18 flex flex-1 justify-center">

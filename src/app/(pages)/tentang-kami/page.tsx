@@ -3,10 +3,15 @@
 import { useState } from "react";
 import { FaInstagram, FaGithub } from "react-icons/fa";
 import { motion } from "motion/react";
+import { Playwrite_DE_LA } from "next/font/google";
 
 import firman from "@/assets/images/pic/Firman.jpg";
 import fauzan from "@/assets/images/pic/Fauzan.jpg";
 import iyan from "@/assets/images/pic/Iyan.jpg";
+
+const playwrite = Playwrite_DE_LA({
+	display: "swap",
+});
 
 const TeamList = [
 	{
@@ -56,14 +61,14 @@ export default function TentangKamiPage() {
 
 			{/* Highlight Section */}
 			<motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.2, ease: [0.42, 0, 0.58, 1] }} className="text-font-primary mx-auto mt-10 max-w-7xl rounded-lg bg-[linear-gradient(90deg,_#E6E3BD_30%,_#C6DBA5_54%,_#A2C59A_86%,_#7BAF84_100%)] px-4 py-16 shadow-md">
-				<div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 					<div className="flex flex-col gap-2">
-						<h3 className="font-Playwrite_DK_Loopet sm:font-3xl text-2xl font-bold italic">Cara Modern Mengenal Herbal Lokal</h3>
+						<h3 className={`sm:font-3xl text-2xl font-bold mb-2 ${playwrite.className}`}>Cara Modern Mengenal Herbal Lokal</h3>
 						<p className="text-base leading-relaxed">Platform kami memberdayakan pengguna untuk menjelajahi tanaman herbal asli Indonesia melalui teknologi pengenalan daun berbasis AI. Cukup unggah foto untuk mengetahui nama tanaman, manfaat tradisional, dan nilai budayanya. Temukan kembali kearifan alam satu daun demi satu daun.</p>
 					</div>
 					<div className="flex items-center">
-						<blockquote className="rounded-lg bg-white p-6 text-base leading-relaxed font-normal text-gray-800 shadow-md">
-							<span className="text-green-primary text-2xl font-bold">“</span>Misi kami adalah menghadirkan kembali kearifan herbal Indonesia dengan teknologi AI terkini, agar lebih mudah dipelajari, diakses, dan diterapkan oleh semua orang.<span className="text-green-primary text-2xl font-bold">”</span>
+						<blockquote className="bg-white rounded-lg p-6 shadow-md">
+							<span className="text-2xl text-green-primary font-bold">“</span>Misi kami adalah menghadirkan kembali kearifan herbal Indonesia dengan teknologi AI terkini, agar lebih mudah dipelajari, diakses, dan diterapkan oleh semua orang.<span className="text-2xl text-green-primary font-bold">”</span>
 						</blockquote>
 					</div>
 				</div>
