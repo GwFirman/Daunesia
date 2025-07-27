@@ -323,7 +323,7 @@ export default function DeteksiPage() {
 										alt=""
 										width={114}
 										onClick={() => handleClickContoh(img.imgSrc, img.name)}
-										className="cursor-pointer hover:scale-102 transition-transform rounded-sm"
+										className="cursor-pointer object-cover hover:scale-102 transition-transform rounded-sm"
 									/>
 								))}
 							</div>
