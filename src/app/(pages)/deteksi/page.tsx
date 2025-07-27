@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import axios from "axios";
 import Image from "next/image";
+import toast, { Toaster } from 'react-hot-toast';
 
 import contohDeteksi from "@/assets/images/contohDeteksi.svg";
 import _searchIcons from "@/assets/icons/searchIcons.svg";
@@ -123,6 +124,44 @@ export default function DeteksiPage() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Function to show coming soon toast - HANYA untuk upload
+  const showUploadComingSoonToast = () => {
+    toast('🚧 Coming Soon! Fitur upload akan segera hadir, gunakan contoh gambar dulu yuk!', {
+      duration: 3000,
+      position: 'top-center',
+      style: {
+        background: '#FEF3C7',
+        color: '#92400E',
+        border: '1px solid #F59E0B',
+        borderRadius: '8px',
+        fontSize: '14px',
+        fontWeight: '500',
+        maxWidth: '400px',
+        textAlign: 'center',
+      },
+      icon: '⏳',
+    });
+  };
+
+  // Function untuk toast deteksi dummy
+  const showDetectionDummyToast = () => {
+    toast('📊 Info: Data yang ditampilkan adalah dummy data untuk demo purposes!', {
+      duration: 4000,
+      position: 'top-center',
+      style: {
+        background: '#DBEAFE',
+        color: '#1E40AF',
+        border: '1px solid #3B82F6',
+        borderRadius: '8px',
+        fontSize: '14px',
+        fontWeight: '500',
+        maxWidth: '400px',
+        textAlign: 'center',
+      },
+      icon: '🔬',
+    });
+  };
 
   async function checkRemainingTrials() {
     try {
@@ -266,439 +305,369 @@ export default function DeteksiPage() {
   }, []);
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 40 }}
-      animate={mounted ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
-      className="mx-auto max-w-7xl w-full px-4 py-16"
-    >
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="flex w-full flex-col items-center gap-3 px-5"
-      >
-        <div className="flex flex-col gap-1 text-center">
-          <h2 className="text-font-primary text-3xl font-bold">
-            Unggah, Kenali, dan Pelajari
-          </h2>
-          <p className="text-font-primary max-w-212.5 text-lg">
-            Daunesia membantumu mengenal kekayaan tanaman herbal Indonesia.
-            Unggah foto daun, akar, bunga, atau biji dan sistem kami akan
-            mengenalinya beserta nama lokal dan khasiatnya.
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Deteksi Section */}
-      <motion.div
+    <>
+      {/* React Hot Toast Container */}
+      <Toaster />
+      
+      <motion.section
         initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
+        animate={mounted ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
-        className="mx-auto max-w-7xl flex flex-col-reverse gap-12 p-6 lg:flex-row lg:gap-20 rounded-2xl bg-gradient-to-r from-[#E7F3E7] to-[#B5D6B3] my-12"
+        className="mx-auto max-w-7xl w-full px-4 py-16"
       >
-        {/* Left Column */}
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex w-full flex-col gap-4 lg:w-2/6"
+          className="flex w-full flex-col items-center gap-3 px-5"
         >
-          <div className="bg-white p-6 rounded-xl shadow-lg">
-            {file ? (
-              <div className="border-green-primary flex p-2 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed">
-                <Image
-                  width={320}
-                  className="object-cover rounded-md max-h-64"
-                  height={0}
-                  alt="Gambar yang diunggah"
-                  src={URL.createObjectURL(file)}
-                />
-                <p className="text-green-secondary text-sm font-medium">
-                  {file.name}
-                </p>
-              </div>
-            ) : (
-              <motion.div
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setIsDragging(true);
-                }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  setIsDragging(false);
-                  const droppedFile = e.dataTransfer.files?.[0];
-                  if (droppedFile) {
-                    if (!droppedFile.type.startsWith("image/")) {
-                      alert("Hanya file gambar yang diperbolehkan.");
-                      return;
-                    }
-                    if (droppedFile.size > 2 * 1024 * 1024) {
-                      alert("Ukuran file maksimal 2MB.");
-                      return;
-                    }
-                    setfile(droppedFile);
-                  }
-                }}
-                className={`${
-                  isDragging
-                    ? "border-green-600 bg-green-50"
-                    : "border-green-primary"
-                } flex h-70 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed transition-all duration-200`}
-              >
-                <svg
-                  width="70"
-                  height="70"
-                  viewBox="0 0 98 98"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10.2084 46.9583V14.2083C10.2084 11.9992 11.9992 10.2083 14.2084 10.2083H83.7917C86.0008 10.2083 87.7917 11.9992 87.7917 14.2083V83.7917C87.7917 86.0008 86.0008 87.7917 83.7917 87.7917H14.2084C11.9992 87.7917 10.2084 86.0008 10.2084 83.7917V63.2917"
-                    stroke="#537D5D"
-                    strokeWidth="4.5"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M16.3334 53.0833L28.9305 40.4862C29.8129 39.6038 31.2788 39.736 31.9891 40.7619L47.7665 63.5506C48.4312 64.5106 49.7735 64.6995 50.6773 63.9601L70.0575 48.104C70.8528 47.4533 72.0117 47.5111 72.7382 48.2377L87.7917 63.2917"
-                    stroke="#537D5D"
-                    strokeWidth="4.5"
-                    strokeLinecap="round"
-                  />
-                  <circle
-                    cx="67.375"
-                    cy="30.625"
-                    r="6.125"
-                    fill="#537D5D"
-                    stroke="#537D5D"
-                    strokeWidth="4.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-
-                <div className="inline-flex flex-col items-center justify-start">
-                  <div className="text-green-secondary text-center font-medium">
-                    Unggah gambar tanaman
-                  </div>
-                  <div className="text-center text-green-secondary text-sm">
-                    Seret atau{" "}
-                    <label
-                      htmlFor="file"
-                      className="font-medium hover:text-green-primary hover:underline transition-colors duration-200 cursor-pointer"
-                    >
-                      unggah gambar
-                    </label>
-                  </div>
-                  <input
-                    onChange={(e) => {
-                      const selectedFile = e.target.files?.[0];
-                      if (!selectedFile) return;
-                      if (!selectedFile.type.startsWith("image/")) {
-                        alert("Hanya file gambar yang diperbolehkan.");
-                        return;
-                      }
-                      if (selectedFile.size > 2 * 1024 * 1024) {
-                        alert("Ukuran file maksimal 2MB.");
-                        return;
-                      }
-                      setfile(selectedFile);
-                    }}
-                    type="file"
-                    id="file"
-                    className="hidden"
-                    accept="image/*"
-                  />
-                </div>
-              </motion.div>
-            )}
-
-            {/* Progress Bar */}
-            {isLoading && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4"
-              >
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-green-secondary h-2 rounded-full transition-all duration-300"
-                    style={{
-                      width: `${
-                        uploadProgress === 100 ? 100 : uploadProgress
-                      }%`,
-                    }}
-                  ></div>
-                </div>
-                <p className="text-green-secondary text-sm mt-2 text-center">
-                  {uploadProgress === 100
-                    ? "Sedang memproses gambar..."
-                    : uploadProgress > 0
-                    ? `Mengunggah... ${uploadProgress}%`
-                    : "Memproses gambar..."}
-                </p>
-              </motion.div>
-            )}
-
-            {/* Error Message */}
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4 p-3 bg-red-100 border border-red-300 rounded-lg"
-              >
-                <p className="text-red-600 text-sm">{error}</p>
-              </motion.div>
-            )}
-
-            {/* Buttons */}
-            <div className="flex gap-2 mt-4">
-              <button
-                onClick={resetDeteksi}
-                disabled={isLoading}
-                className="cursor-pointer flex-1 flex items-center justify-center gap-2 rounded-full bg-green-secondary px-5 py-2 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-primary transition-colors"
-              >
-                Bersihkan
-              </button>
-              <button
-                onClick={mulaiDeteksi}
-                disabled={
-                  !file || isLoading || (!isLoggedIn && remainingTrials === 0)
-                }
-                className="flex-1 cursor-pointer flex items-center justify-center gap-2 rounded-full border-2 border-green-secondary bg-white px-5 py-2 text-green-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-50 transition-colors"
-              >
-                {isLoading ? "Memproses..." : "Mulai Deteksi"}
-              </button>
-            </div>
-
-            {/* Login Suggestion */}
-            {!isLoggedIn &&
-              remainingTrials !== null &&
-              remainingTrials <= 2 && (
-                <div className="mt-3 p-3 bg-green-50 border border-green-light rounded-lg">
-                  <p className="text-green-primary text-sm text-center">
-                    💡 <strong>Tips:</strong> Login untuk mendapatkan percobaan
-                    tak terbatas dan fitur premium lainnya!
-                  </p>
-                </div>
-              )}
-          </div>
-
-          <div className="bg-white p-4 rounded-xl shadow-lg">
-            <div className="flex flex-col">
-              <h6 className="text-sm mb-2">Contoh Tanaman</h6>
-              <div className="flex flex-row gap-2">
-                {contohImages.map((img, i) => (
-                  <img
-                    key={i}
-                    src={img.imgSrc}
-                    alt=""
-                    width={114}
-                    onClick={() => handleClickContoh(img.imgSrc, img.name)}
-                    className="cursor-pointer hover:scale-102 transition-transform rounded-sm"
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Label Akurasi, Sisa Percobaan, dan Akses Login */}
-          <div className="flex flex-row flex-wrap gap-3">
-            {/* Remaining Trials Counter (Non-Logged-in) */}
-            {!isLoggedIn && remainingTrials !== null && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="rounded-lg border-l-4 border-green-secondary bg-white p-3 text-sm shadow-md max-w-max text-center"
-              >
-                <div className="flex items-center gap-2">
-                  <svg
-                    className="h-5 w-5 text-green-secondary"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <p className="text-font-primary font-semibold">
-                    Percobaan Tersisa: {remainingTrials}
-                  </p>
-                </div>
-
-                {remainingTrials === 0 && (
-                  <p className="text-xs text-red-600">
-                    Limit tercapai. Silakan login untuk melanjutkan.
-                  </p>
-                )}
-
-                {remainingTrials > 0 && remainingTrials <= 2 && (
-                  <p className="text-xs text-orange-600">
-                    Segera login untuk percobaan lebih banyak.
-                  </p>
-                )}
-              </motion.div>
-            )}
-
-            {/* Logged-in Success Message */}
-            {isLoggedIn && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="rounded-lg border-l-4 border-green-secondary bg-green-50 p-3 text-sm shadow-md max-w-max text-center"
-              >
-                <div className="flex items-center gap-2">
-                  <svg
-                    className="h-5 w-5 text-green-secondary"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  <p className="text-sm font-semibold text-green-secondary">
-                    Akses Tidak Terbatas
-                  </p>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Accuracy Label */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex items-center gap-2 rounded-lg bg-white p-2 text-sm shadow-md max-w-max text-center"
-            >
-              <img
-                src={accurationIcons.src}
-                alt="Akurasi"
-                className="h-5 w-5"
-              />
-              <p className="text-font-primary font-semibold">98% Akurat.</p>
-            </motion.div>
+          <div className="flex flex-col gap-1 text-center">
+            <h2 className="text-font-primary text-3xl font-bold">
+              Unggah, Kenali, dan Pelajari
+            </h2>
+            <p className="text-font-primary max-w-212.5 text-lg">
+              Daunesia membantumu mengenal kekayaan tanaman herbal Indonesia.
+              Unggah foto daun, akar, bunga, atau biji dan sistem kami akan
+              mengenalinya beserta nama lokal dan khasiatnya.
+            </p>
           </div>
         </motion.div>
-        {/* Right Column */}
-        <AnimatePresence mode="wait">
-          {!result && (
-            <motion.div
-              key="default-content"
-              exit={{ opacity: 0, y: 30 }}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex w-full flex-col gap-4 lg:w-5/8"
-            >
-              <h3 className="text-font-primary text-2xl font-bold">
-                Tanaman Herbal yang Dapat Dikenali
-              </h3>
-              <Image
-                width={768}
-                src={contohDeteksi.src}
-                alt="Contoh tanaman herbal yang dapat dikenali"
-                height={0}
-              />
-            </motion.div>
-          )}
-          {result && (
-            <motion.div
-              key="result-content"
-              exit={{ opacity: 0, y: 30 }}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex w-full flex-col gap-4 lg:w-5/8"
-            >
-              <h3 className="text-font-primary text-2xl font-bold">
-                Hasil Deteksi
-              </h3>
-              <div className="bg-white p-6 rounded-xl shadow-lg">
-                <div className="flex flex-col gap-4">
-                  <div className="border-b pb-4">
-                    <h4 className="text-green-secondary text-xl font-bold mb-2">
-                      {plantName ||
-                        result.data[0]?.label ||
-                        "Tanaman Terdeteksi"}
-                    </h4>
-                    <p className="text-font-primary text-sm">
-                      Tanaman berhasil diidentifikasi dengan tingkat kepercayaan
-                      tinggi
-                    </p>
-                  </div>
 
-                  <div className="space-y-3">
-                    <h5 className="text-font-primary font-semibold">
-                      Tingkat Kepercayaan:
-                    </h5>
-                    {result.data[0]?.confidences?.map((confidence, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between"
+        {/* Deteksi Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
+          className="mx-auto max-w-7xl flex flex-col-reverse gap-12 p-6 lg:flex-row lg:gap-12 rounded-2xl bg-gradient-to-r from-[#E7F3E7] to-[#B5D6B3] my-12"
+        >
+          {/* Left Column */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex w-full flex-col gap-4 lg:w-2/6"
+          >
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              {file ? (
+                <div className="border-green-primary flex p-2 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed">
+                  <Image
+                    width={320}
+                    className="object-cover rounded-md max-h-64"
+                    height={0}
+                    alt="Gambar yang diunggah"
+                    src={URL.createObjectURL(file)}
+                  />
+                  <p className="text-green-secondary text-sm font-medium">
+                    {file.name}
+                  </p>
+                </div>
+              ) : (
+                <motion.div
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDragging(true);
+                  }}
+                  onDragLeave={() => setIsDragging(false)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setIsDragging(false);
+                    // TIDAK menampilkan toast pada drop area
+                  }}
+                  className={`${
+                    isDragging
+                      ? "border-green-600 bg-green-50"
+                      : "border-green-primary"
+                  } flex h-70 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed transition-all duration-200`}
+                >
+                  <svg
+                    width="70"
+                    height="70"
+                    viewBox="0 0 98 98"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10.2084 46.9583V14.2083C10.2084 11.9992 11.9992 10.2083 14.2084 10.2083H83.7917C86.0008 10.2083 87.7917 11.9992 87.7917 14.2083V83.7917C87.7917 86.0008 86.0008 87.7917 83.7917 87.7917H14.2084C11.9992 87.7917 10.2084 86.0008 10.2084 83.7917V63.2917"
+                      stroke="#537D5D"
+                      strokeWidth="4.5"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M16.3334 53.0833L28.9305 40.4862C29.8129 39.6038 31.2788 39.736 31.9891 40.7619L47.7665 63.5506C48.4312 64.5106 49.7735 64.6995 50.6773 63.9601L70.0575 48.104C70.8528 47.4533 72.0117 47.5111 72.7382 48.2377L87.7917 63.2917"
+                      stroke="#537D5D"
+                      strokeWidth="4.5"
+                      strokeLinecap="round"
+                    />
+                    <circle
+                      cx="67.375"
+                      cy="30.625"
+                      r="6.125"
+                      fill="#537D5D"
+                      stroke="#537D5D"
+                      strokeWidth="4.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+
+                  <div className="inline-flex flex-col items-center justify-start">
+                    <div className="text-green-secondary text-center font-medium">
+                      Unggah gambar tanaman
+                    </div>
+                    <div className="text-center text-green-secondary text-sm">
+                      Seret atau{" "}
+                      <label
+                        htmlFor="file"
+                        className="font-medium hover:text-green-primary hover:underline transition-colors duration-200 cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation(); // Prevent event bubbling
+                          showUploadComingSoonToast(); // HANYA label yang show toast
+                        }}
                       >
-                        <span className="text-font-primary text-sm">
-                          {confidence.label}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-24 bg-gray-200 rounded-full h-2">
-                            <div
-                              className="bg-green-secondary h-2 rounded-full transition-all duration-300"
-                              style={{
-                                width: `${confidence.confidence * 100}%`,
-                              }}
-                            ></div>
-                          </div>
-                          <span className="text-green-secondary text-sm font-medium">
-                            {(confidence.confidence * 100).toFixed(1)}%
-                          </span>
+                        unggah gambar
+                      </label>
+                    </div>
+                    <input
+                      type="file"
+                      id="file"
+                      className="hidden"
+                      accept="image/*"
+                      disabled // Disable the input
+                    />
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Progress Bar */}
+              {isLoading && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4"
+                >
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-green-secondary h-2 rounded-full transition-all duration-300"
+                      style={{
+                        width: `${
+                          uploadProgress === 100 ? 100 : uploadProgress
+                        }%`,
+                      }}
+                    ></div>
+                  </div>
+                  <p className="text-green-secondary text-sm mt-2 text-center">
+                    {uploadProgress === 100
+                      ? "Sedang memproses gambar..."
+                      : uploadProgress > 0
+                      ? `Mengunggah... ${uploadProgress}%`
+                      : "Memproses gambar..."}
+                  </p>
+                </motion.div>
+              )}
+
+              {/* Error Message */}
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 p-3 bg-red-100 border border-red-300 rounded-lg"
+                >
+                  <p className="text-red-600 text-sm">{error}</p>
+                </motion.div>
+              )}
+
+              {/* Buttons - TIDAK ada toast di sini */}
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={resetDeteksi}
+                  disabled={isLoading}
+                  className="cursor-pointer flex-1 flex items-center justify-center gap-2 rounded-full bg-green-secondary px-5 py-2 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-primary transition-colors"
+                >
+                  Bersihkan
+                </button>
+                <button
+                  onClick={() => {
+                    if (!file) return;
+                    
+                    // Tampilkan toast bahwa ini dummy data
+                    showDetectionDummyToast();
+                    
+                    // Delay sedikit sebelum mulai deteksi agar toast terlihat
+                    setTimeout(() => {
+                      mulaiDeteksi();
+                    }, 500);
+                  }}
+                  disabled={
+                    !file || isLoading || (!isLoggedIn && remainingTrials === 0)
+                  }
+                  className="flex-1 cursor-pointer flex items-center justify-center gap-2 rounded-full border-2 border-green-secondary bg-white px-5 py-2 text-green-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-50 transition-colors"
+                >
+                  {isLoading ? "Memproses..." : "Mulai Deteksi"}
+                </button>
+              </div>
+
+              {/* Contoh gambar section - Updated styling */}
+              <div className="bg-white p-4 rounded-xl shadow-lg mt-4">
+                <div className="flex flex-col gap-3">
+                  <h6 className="text-font-primary text-sm font-medium mb-1">Contoh Tanaman</h6>
+                  <div className="grid grid-cols-3 gap-3">
+                    {contohImages.map((img, i) => (
+                      <div
+                        key={i}
+                        onClick={() => handleClickContoh(img.imgSrc, img.name)}
+                        className="group cursor-pointer overflow-hidden rounded-lg border border-gray-200 hover:border-green-secondary transition-all duration-200 hover:shadow-md"
+                      >
+                        <div className="aspect-square w-full overflow-hidden">
+                          <img
+                            src={img.imgSrc}
+                            alt={`Contoh tanaman ${i + 1}`}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                          />
                         </div>
                       </div>
                     ))}
                   </div>
-
-                  {/* Plant Description */}
-                  {plantDescription && (
-                    <div className="border-t pt-4">
-                      <h5 className="text-font-primary font-semibold mb-3">
-                        Deskripsi & Manfaat:
-                      </h5>
-                      <div className="prose prose-sm max-w-none">
-                        <div
-                          className="text-font-primary text-sm leading-relaxed whitespace-pre-wrap"
-                          dangerouslySetInnerHTML={{
-                            __html: plantDescription
-                              .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                              .replace(/\*(.*?)\*/g, "<em>$1</em>"),
-                          }}
-                        />
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </motion.section>
+
+              {/* Stats section - Updated styling */}
+              <div className="flex flex-row gap-3 mt-4">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm"
+                >
+                  <div className="flex items-center justify-center w-5 h-5 rounded-full bg-green-100">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="10" stroke="#537D5D" strokeWidth="2"/>
+                      <path d="m9 12 2 2 4-4" stroke="#537D5D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <span className="text-font-primary font-medium">Percobaan Tersisa: 3</span>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm"
+                >
+                  <Image src={accurationIcons} alt="Accuracy icon" width={16} height={16} />
+                  <span className="text-font-primary font-medium">98% Akurat</span>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+          {/* Right Column */}
+          <AnimatePresence mode="wait">
+            {!result && (
+              <motion.div
+                key="default-content"
+                exit={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="flex w-full flex-col gap-4 lg:w-5/8"
+              >
+                <h3 className="text-font-primary text-2xl font-bold">
+                  Tanaman Herbal yang Dapat Dikenali
+                </h3>
+                <Image
+                  width={768}
+                  src={contohDeteksi.src}
+                  alt="Contoh tanaman herbal yang dapat dikenali"
+                  height={0}
+                />
+              </motion.div>
+            )}
+            {result && (
+              <motion.div
+                key="result-content"
+                exit={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="flex w-full flex-col gap-4 lg:w-5/8"
+              >
+                <h3 className="text-font-primary text-2xl font-bold">
+                  Hasil Deteksi
+                </h3>
+                <div className="bg-white p-6 rounded-xl shadow-lg">
+                  <div className="flex flex-col gap-4">
+                    <div className="border-b pb-4">
+                      <h4 className="text-green-secondary text-xl font-bold mb-2">
+                        {plantName ||
+                          result.data[0]?.label ||
+                          "Tanaman Terdeteksi"}
+                      </h4>
+                      <p className="text-font-primary text-sm">
+                        Tanaman berhasil diidentifikasi dengan tingkat kepercayaan
+                        tinggi
+                      </p>
+                    </div>
+
+                    <div className="space-y-3">
+                      <h5 className="text-font-primary font-semibold">
+                        Tingkat Kepercayaan:
+                      </h5>
+                      {result.data[0]?.confidences?.map((confidence, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between"
+                        >
+                          <span className="text-font-primary text-sm">
+                            {confidence.label}
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <div className="w-24 bg-gray-200 rounded-full h-2">
+                              <div
+                                className="bg-green-secondary h-2 rounded-full transition-all duration-300"
+                                style={{
+                                  width: `${confidence.confidence * 100}%`,
+                                }}
+                              ></div>
+                            </div>
+                            <span className="text-green-secondary text-sm font-medium">
+                              {(confidence.confidence * 100).toFixed(1)}%
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Plant Description */}
+                    {plantDescription && (
+                      <div className="border-t pt-4">
+                        <h5 className="text-font-primary font-semibold mb-3">
+                          Deskripsi & Manfaat:
+                        </h5>
+                        <div className="prose prose-sm max-w-none">
+                          <div
+                            className="text-font-primary text-sm leading-relaxed whitespace-pre-wrap"
+                            dangerouslySetInnerHTML={{
+                              __html: plantDescription
+                                .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                                .replace(/\*(.*?)\*/g, "<em>$1</em>"),
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </motion.section>
+    </>
   );
 }
