@@ -87,7 +87,7 @@ export default function Login() {
 										}}
 										whileHover={{ scale: 1.02 }}
 										whileTap={{ scale: 0.98 }}
-										className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-zinc-800/40 bg-white"
+										className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-zinc-800/40 bg-white cursor-pointer"
 									>
 										{/* Google Logo */}
 										<svg className="h-5 w-5" viewBox="0 0 48 48">
@@ -111,7 +111,7 @@ export default function Login() {
 										}}
 										whileHover={{ scale: 1.02 }}
 										whileTap={{ scale: 0.98 }}
-										className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-zinc-800/40 bg-white"
+										className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-zinc-800/40 bg-white cursor-pointer"
 									>
 										{/* Facebook Logo */}
 										<svg className="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
