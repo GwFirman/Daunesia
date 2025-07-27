@@ -12,449 +12,693 @@ import Contoh1 from "@/assets/images/contoh1.jpg";
 import Contoh2 from "@/assets/images/contoh2.jpg";
 import Contoh3 from "@/assets/images/contoh3.jpg";
 
-
 export interface ApiResponse {
-	success: boolean;
-	result: Result;
+  success: boolean;
+  result: Result;
 }
 
 export interface LimitResponse {
-	loggedIn: boolean;
-	remaining: number;
+  loggedIn: boolean;
+  remaining: number;
 }
 
 export interface ErrorResponse {
-	error: string;
+  error: string;
 }
 
 export interface Result {
-	type: string;
-	time: string;
-	data: [Data, string, string];
-	endpoint: string;
-	fn_index: number;
+  type: string;
+  time: string;
+  data: [Data, string, string];
+  endpoint: string;
+  fn_index: number;
 }
 
 export interface Data {
-	label: string;
-	confidences: Confidence[];
+  label: string;
+  confidences: Confidence[];
 }
 
 export interface Confidence {
-	label: string;
-	confidence: number;
+  label: string;
+  confidence: number;
 }
 
 const contohImages = [
-	{ imgSrc: Contoh1.src, name: "Contoh1.jpg" },
-	{ imgSrc: Contoh2.src, name: "Contoh2.jpg" },
-	{ imgSrc: Contoh3.src, name: "Contoh3.jpg" }
+  { imgSrc: Contoh1.src, name: "Contoh1.jpg" },
+  { imgSrc: Contoh2.src, name: "Contoh2.jpg" },
+  { imgSrc: Contoh3.src, name: "Contoh3.jpg" },
 ];
 
+// Dummy results data
+const dummyResults = {
+  "Contoh1.jpg": {
+    type: "json",
+    time: "2024-07-27 10:30:15",
+    data: [
+      {
+        label: "Aloe Vera",
+        confidences: [
+          { label: "Aloe Vera (Lidah Buaya)", confidence: 0.968 },
+          { label: "Aloe Barbadensis", confidence: 0.024 },
+          { label: "Agave", confidence: 0.008 },
+        ],
+      },
+      "Aloe Vera (Lidah Buaya)",
+      "**Deskripsi:**\nAloe vera atau lidah buaya adalah tanaman sukulen yang memiliki daun tebal berdaging dengan gel transparan di dalamnya. Tanaman ini telah dikenal selama ribuan tahun karena khasiat penyembuhannya.\n\n**Manfaat:**\n- **Penyembuhan luka:** Gel aloe vera membantu mempercepat penyembuhan luka bakar, luka kecil, dan iritasi kulit\n- **Pelembab alami:** Kandungan gel yang tinggi air memberikan kelembaban pada kulit kering\n- **Anti-inflamasi:** Memiliki sifat anti-inflamasi yang membantu mengurangi peradangan kulit\n- **Kesehatan pencernaan:** Jus aloe vera dapat membantu mengatasi masalah pencernaan ringan\n- **Perawatan rambut:** Gel aloe vera dapat digunakan sebagai kondisioner alami untuk rambut\n- **Antioksidan:** Mengandung vitamin C, E, dan beta karoten yang melindungi kulit dari radikal bebas\n\n**Catatan:** Gunakan gel aloe vera segar untuk hasil terbaik. Hindari penggunaan berlebihan secara internal.",
+    ],
+    endpoint: "/predict",
+    fn_index: 0,
+  },
+  "Contoh2.jpg": {
+    type: "json",
+    time: "2024-07-27 10:35:22",
+    data: [
+      {
+        label: "Ciplukan",
+        confidences: [
+          { label: "Physalis Angulata (Ciplukan)", confidence: 0.952 },
+          { label: "Physalis Peruviana", confidence: 0.031 },
+          { label: "Solanum Nigrum", confidence: 0.017 },
+        ],
+      },
+      "Physalis Angulata (Ciplukan)",
+      "**Deskripsi:**\nCiplukan adalah tanaman herbal yang memiliki buah kecil berwarna kuning yang terbungkus dalam kelopak seperti lampion. Tanaman ini tumbuh liar dan mudah ditemukan di Indonesia, terutama di daerah yang lembab.\n\n**Manfaat:**\n- **Antioksidan tinggi:** Buah ciplukan kaya akan vitamin C dan antioksidan yang melindungi tubuh dari radikal bebas\n- **Meningkatkan imunitas:** Kandungan vitamin C membantu memperkuat sistem kekebalan tubuh\n- **Anti-inflamasi:** Memiliki sifat anti-inflamasi yang membantu mengurangi peradangan dalam tubuh\n- **Kesehatan mata:** Mengandung beta karoten yang baik untuk kesehatan mata\n- **Detoksifikasi:** Membantu membersihkan racun dalam tubuh melalui sistem ekskresi\n- **Pengobatan tradisional:** Secara tradisional digunakan untuk mengobati demam, batuk, dan masalah pernapasan\n- **Kesehatan kulit:** Antioksidan dalam ciplukan membantu menjaga kesehatan kulit dari dalam\n\n**Catatan:** Konsumsi buah yang sudah matang. Hindari konsumsi berlebihan dan konsultasikan dengan ahli kesehatan jika digunakan sebagai obat.",
+    ],
+    endpoint: "/predict",
+    fn_index: 0,
+  },
+  "Contoh3.jpg": {
+    type: "json",
+    time: "2024-07-27 10:40:33",
+    data: [
+      {
+        label: "Nangka Cempedak",
+        confidences: [
+          { label: "Artocarpus Integer (Nangka Cempedak)", confidence: 0.942 },
+          {
+            label: "Artocarpus Heterophyllus (Nangka Mini)",
+            confidence: 0.047,
+          },
+          { label: "Pouleria Caimito (Abiu)", confidence: 0.011 },
+        ],
+      },
+      "Artocarpus Integer (Nangka Cempedak)",
+      "**Deskripsi:**\nArtocarpus integer, lebih dikenal sebagai cempedak, adalah pohon buah tropis yang termasuk dalam famili Moraceae. Bentuknya mirip dengan nangka, namun ukurannya lebih kecil dan buahnya memiliki aroma yang lebih harum dan kuat. Tekstur daging buahnya lembut dan manis, dengan rasa yang unik dan sedikit lengket. Cempedak memiliki nilai gizi tinggi dan berbagai manfaat kesehatan. Pohon cempedak termasuk kedalam suku mulberry. Selain buahnya yang lezat, berbagai bagian tanaman cempedak, termasuk daun, kulit kayu, dan getah, juga memiliki khasiat tertentu.\n\n**Manfaat:**\n- **Sumber nutrisi:** Buah cempedak kaya akan vitamin C, karoteroid, serat, dan berbagai mineral penting, membantu meningkatkan kesehatan secara umum\n- **Meningkatkan sistem kekebalan:** Seratnya yang tinggi membantu kesehatan pencernaan dan vitamin C yang tinggi berpraaan penting dalam memperkuat sistem kekebalan tubuh\n- **Sumber energi alami:** Kandungan karbohidratnya menyediakan energi untuk aktivitas sehari-hari\n- **Sebagai antioksidan:** Karateroid dalam cempedak memiliki sifat antioksidan yang dapat melindungi sel dari kerusakan akibat radikal bebas\n- **Potensi pengobatan tradisional:** Berbagai bagian tanaman cempedak, secara tradisional digunakan untuk mengobati berbagai masalah kesehatan seperti diare, demam, dan luka pada penelitian lebih lanjut untuk membuktikan klaim ini\n- **Meningkatkan kesehatan kulit:** Berbagai penelitian menunjukkan potensi manfaat ekstrak cempedak untuk kesehatan kulit, namun masih membutuhkan penelitian lebih lanjut\n\n**Catatan:** Manfaat pengobatan tradisional perlu dikaji lebih lanjut secara ilmiah. Konsultasikan dengan dokter atau ahli kesehatan sebelum menggunakan bagian tanaman cempedak untuk pengobatan.",
+    ],
+    endpoint: "/predict",
+    fn_index: 0,
+  },
+};
+
 export default function DeteksiPage() {
-	const [mounted, setMounted] = useState(false);
-	const [isDragging, setIsDragging] = useState(false);
-	const [file, setfile] = useState<File | null>(null);
-	const [result, setResult] = useState<Result | null>(null);
-	const [plantDescription, setPlantDescription] = useState<string>("");
-	const [plantName, setPlantName] = useState<string>("");
-	const [remainingTrials, setRemainingTrials] = useState<number | null>(null);
-	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-	const [uploadProgress, setUploadProgress] = useState(0);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [file, setfile] = useState<File | null>(null);
+  const [result, setResult] = useState<Result | null>(null);
+  const [plantDescription, setPlantDescription] = useState<string>("");
+  const [plantName, setPlantName] = useState<string>("");
+  const [remainingTrials, setRemainingTrials] = useState<number | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-	async function checkRemainingTrials() {
-		try {
-			const response = await axios.get<LimitResponse>("/api/deteksi");
-			setRemainingTrials(response.data.remaining);
-			setIsLoggedIn(response.data.loggedIn);
-		} catch (error) {
-			console.error("Error checking remaining trials:", error);
-		}
-	}
+  async function checkRemainingTrials() {
+    try {
+      const response = await axios.get<LimitResponse>("/api/deteksi");
+      setRemainingTrials(response.data.remaining);
+      setIsLoggedIn(response.data.loggedIn);
+    } catch (error) {
+      console.error("Error checking remaining trials:", error);
+    }
+  }
 
-	async function mulaiDeteksi(): Promise<any> {
-		if (!file) return;
+  async function mulaiDeteksi(): Promise<any> {
+    if (!file) return;
 
-		setIsLoading(true);
-		setError(null);
-		setUploadProgress(0);
+    // Check if this is a dummy example file
+    const isDummyFile = contohImages.some((img) => img.name === file.name);
 
-		const formData = new FormData();
-		formData.append("file", file);
+    if (isDummyFile) {
+      // Use dummy data for example files
+      setIsLoading(true);
+      setError(null);
+      setUploadProgress(0);
 
-		try {
-			const response = await axios.post<ApiResponse>("/api/deteksi", formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-				onUploadProgress: (progressEvent) => {
-					if (progressEvent.total) {
-						const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-						setUploadProgress(percent);
-						console.log(`📶 Progress: ${percent}%`);
-					}
-				},
-			});
+      // Simulate loading progress
+      const progressInterval = setInterval(() => {
+        setUploadProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(progressInterval);
+            return 100;
+          }
+          return prev + 20;
+        });
+      }, 200);
 
-			if (!response.data || !response.data.success || !response.data.result) {
-				throw new Error("Tidak ada data yang diterima dari server");
-			}
+      // Simulate processing delay
+      setTimeout(() => {
+        const dummyResult =
+          dummyResults[file.name as keyof typeof dummyResults];
+        if (dummyResult) {
+          setResult(dummyResult as Result);
+          // Ensure we're getting strings from the data array
+          const plantNameFromData =
+            typeof dummyResult.data[1] === "string" ? dummyResult.data[1] : "";
+          const plantDescFromData =
+            typeof dummyResult.data[2] === "string" ? dummyResult.data[2] : "";
+          setPlantName(plantNameFromData);
+          setPlantDescription(plantDescFromData);
+        }
+        setIsLoading(false);
+        setUploadProgress(0);
+        clearInterval(progressInterval);
+      }, 1500);
 
-			const result = response.data.result;
-			setResult(result);
+      return;
+    }
 
-			// Extract plant name and description from the data array
-			if (result.data && result.data.length >= 3) {
-				setPlantName(result.data[1] || "");
-				setPlantDescription(result.data[2] || "");
-			}
-		} catch (error) {
-			console.error("Error saat deteksi:", error);
+    // Original API call for non-dummy files
+    setIsLoading(true);
+    setError(null);
+    setUploadProgress(0);
 
-			// Handle specific error cases
-			if (error instanceof Error) {
-				setError(error.message);
-			} else if (axios.isAxiosError(error) && error.response) {
-				if (error.response.status === 429) {
-					const errorData = error.response.data as ErrorResponse;
-					setError(errorData.error || "Limit percobaan tercapai. Silakan login untuk melanjutkan.");
-				} else {
-					setError("Terjadi kesalahan saat mendeteksi tanaman");
-				}
-			} else {
-				setError("Terjadi kesalahan saat mendeteksi tanaman");
-			}
-		} finally {
-			setIsLoading(false);
-			setUploadProgress(0);
-			// Refresh remaining trials after detection attempt
-			checkRemainingTrials();
-		}
-	}
+    const formData = new FormData();
+    formData.append("file", file);
 
-	function resetDeteksi() {
-		setfile(null);
-		setResult(null);
-		setPlantName("");
-		setPlantDescription("");
-		setError(null);
-		setUploadProgress(0);
-	}
+    try {
+      const response = await axios.post<ApiResponse>("/api/deteksi", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(percent);
+            console.log(`📶 Progress: ${percent}%`);
+          }
+        },
+      });
 
-	const handleClickContoh = async (imgSrc: string, name: string) => {
-		const response = await fetch(imgSrc);
-		const blob = await response.blob();
-		const exampleFile = new File([blob], name, { type: blob.type });
-		setfile(exampleFile);
-	};
+      if (!response.data || !response.data.success || !response.data.result) {
+        throw new Error("Tidak ada data yang diterima dari server");
+      }
 
-	useEffect(() => {
-		const timeout = setTimeout(() => setMounted(true), 100); // delay agar tidak abrupt
-		// Check remaining trials on component mount
-		checkRemainingTrials();
-		return () => clearTimeout(timeout);
-	}, []);
+      const result = response.data.result;
+      setResult(result);
 
-	return (
-		<motion.section initial={{ opacity: 0, y: 40 }} animate={mounted ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }} className="mx-auto max-w-7xl w-full px-4 py-16">
-			{/* Header */}
-			<motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="flex w-full flex-col items-center gap-3 px-5">
-				<div className="flex flex-col gap-1 text-center">
-					<h2 className="text-font-primary text-3xl font-bold">Unggah, Kenali, dan Pelajari</h2>
-					<p className="text-font-primary max-w-212.5 text-lg">Daunesia membantumu mengenal kekayaan tanaman herbal Indonesia. Unggah foto daun, akar, bunga, atau biji dan sistem kami akan mengenalinya beserta nama lokal dan khasiatnya.</p>
-				</div>
-			</motion.div>
+      // Extract plant name and description from the data array
+      if (result.data && result.data.length >= 3) {
+        setPlantName(result.data[1] || "");
+        setPlantDescription(result.data[2] || "");
+      }
+    } catch (error) {
+      console.error("Error saat deteksi:", error);
 
-			{/* Deteksi Section */}
-			<motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }} className="mx-auto max-w-7xl flex flex-col-reverse gap-12 p-6 lg:flex-row lg:gap-20 rounded-2xl bg-gradient-to-r from-[#E7F3E7] to-[#B5D6B3] my-12">
-				{/* Left Column */}
-				<motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="flex w-full flex-col gap-4 lg:w-2/6">
-					<div className="bg-white p-6 rounded-xl shadow-lg">
-						{file ? (
-							<div className="border-green-primary flex p-2 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed">
-								<Image
-									width={320}
-									className="object-cover rounded-md max-h-64"
-									height={0}
-									alt="Gambar yang diunggah"
-									src={URL.createObjectURL(file)}
-								/>
-								<p className="text-green-secondary text-sm font-medium">{file.name}</p>
-							</div>
-						) : (
-							<motion.div
-								onDragOver={(e) => {
-									e.preventDefault();
-									setIsDragging(true);
-								}}
-								onDragLeave={() => setIsDragging(false)}
-								onDrop={(e) => {
-									e.preventDefault();
-									setIsDragging(false);
-									const droppedFile = e.dataTransfer.files?.[0];
-									if (droppedFile) {
-										if (!droppedFile.type.startsWith("image/")) {
-											alert("Hanya file gambar yang diperbolehkan.");
-											return;
-										}
-										if (droppedFile.size > 2 * 1024 * 1024) {
-											alert("Ukuran file maksimal 2MB.");
-											return;
-										}
-										setfile(droppedFile);
-									}
-								}}
-								className={`${isDragging ? "border-green-600 bg-green-50" : "border-green-primary"
-									} flex h-70 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed transition-all duration-200`}
-							>
-								<svg
-									width="70"
-									height="70"
-									viewBox="0 0 98 98"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										d="M10.2084 46.9583V14.2083C10.2084 11.9992 11.9992 10.2083 14.2084 10.2083H83.7917C86.0008 10.2083 87.7917 11.9992 87.7917 14.2083V83.7917C87.7917 86.0008 86.0008 87.7917 83.7917 87.7917H14.2084C11.9992 87.7917 10.2084 86.0008 10.2084 83.7917V63.2917"
-										stroke="#537D5D"
-										strokeWidth="4.5"
-										strokeLinecap="round"
-									/>
-									<path
-										d="M16.3334 53.0833L28.9305 40.4862C29.8129 39.6038 31.2788 39.736 31.9891 40.7619L47.7665 63.5506C48.4312 64.5106 49.7735 64.6995 50.6773 63.9601L70.0575 48.104C70.8528 47.4533 72.0117 47.5111 72.7382 48.2377L87.7917 63.2917"
-										stroke="#537D5D"
-										strokeWidth="4.5"
-										strokeLinecap="round"
-									/>
-									<circle
-										cx="67.375"
-										cy="30.625"
-										r="6.125"
-										fill="#537D5D"
-										stroke="#537D5D"
-										strokeWidth="4.5"
-										strokeLinecap="round"
-									/>
-								</svg>
+      // Handle specific error cases
+      if (error instanceof Error) {
+        setError(error.message);
+      } else if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 429) {
+          const errorData = error.response.data as ErrorResponse;
+          setError(
+            errorData.error ||
+              "Limit percobaan tercapai. Silakan login untuk melanjutkan."
+          );
+        } else {
+          setError("Terjadi kesalahan saat mendeteksi tanaman");
+        }
+      } else {
+        setError("Terjadi kesalahan saat mendeteksi tanaman");
+      }
+    } finally {
+      setIsLoading(false);
+      setUploadProgress(0);
+      // Refresh remaining trials after detection attempt
+      checkRemainingTrials();
+    }
+  }
 
-								<div className="inline-flex flex-col items-center justify-start">
-									<div className="text-green-secondary text-center font-medium">
-										Unggah gambar tanaman
-									</div>
-									<div className="text-center text-green-secondary text-sm">
-										Seret atau{" "}
-										<label
-											htmlFor="file"
-											className="font-medium hover:text-green-primary hover:underline transition-colors duration-200 cursor-pointer"
-										>
-											unggah gambar
-										</label>
-									</div>
-									<input
-										onChange={(e) => {
-											const selectedFile = e.target.files?.[0];
-											if (!selectedFile) return;
-											if (!selectedFile.type.startsWith("image/")) {
-												alert("Hanya file gambar yang diperbolehkan.");
-												return;
-											}
-											if (selectedFile.size > 2 * 1024 * 1024) {
-												alert("Ukuran file maksimal 2MB.");
-												return;
-											}
-											setfile(selectedFile);
-										}}
-										type="file"
-										id="file"
-										className="hidden"
-										accept="image/*"
-									/>
-								</div>
-							</motion.div>
-						)}
+  function resetDeteksi() {
+    setfile(null);
+    setResult(null);
+    setPlantName("");
+    setPlantDescription("");
+    setError(null);
+    setUploadProgress(0);
+  }
 
-						{/* Progress Bar */}
-						{isLoading && (
-							<motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4">
-								<div className="w-full bg-gray-200 rounded-full h-2">
-									<div className="bg-green-secondary h-2 rounded-full transition-all duration-300" style={{ width: `${uploadProgress === 100 ? 100 : uploadProgress}%` }}></div>
-								</div>
-								<p className="text-green-secondary text-sm mt-2 text-center">{uploadProgress === 100 ? "Sedang memproses gambar..." : uploadProgress > 0 ? `Mengunggah... ${uploadProgress}%` : "Memproses gambar..."}</p>
-							</motion.div>
-						)}
+  const handleClickContoh = async (imgSrc: string, name: string) => {
+    const response = await fetch(imgSrc);
+    const blob = await response.blob();
+    const exampleFile = new File([blob], name, { type: blob.type });
+    setfile(exampleFile);
+  };
 
-						{/* Error Message */}
-						{error && (
-							<motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-3 bg-red-100 border border-red-300 rounded-lg">
-								<p className="text-red-600 text-sm">{error}</p>
-							</motion.div>
-						)}
+  useEffect(() => {
+    const timeout = setTimeout(() => setMounted(true), 100); // delay agar tidak abrupt
+    // Check remaining trials on component mount
+    checkRemainingTrials();
+    return () => clearTimeout(timeout);
+  }, []);
 
-						{/* Buttons */}
-						<div className="flex gap-2 mt-4">
-							<button onClick={resetDeteksi} disabled={isLoading} className="cursor-pointer flex-1 flex items-center justify-center gap-2 rounded-full bg-green-secondary px-5 py-2 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-primary transition-colors">
-								Bersihkan
-							</button>
-							<button onClick={mulaiDeteksi} disabled={!file || isLoading || (!isLoggedIn && remainingTrials === 0)} className="flex-1 cursor-pointer flex items-center justify-center gap-2 rounded-full border-2 border-green-secondary bg-white px-5 py-2 text-green-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-50 transition-colors">
-								{isLoading ? "Memproses..." : "Mulai Deteksi"}
-							</button>
-						</div>
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 40 }}
+      animate={mounted ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
+      className="mx-auto max-w-7xl w-full px-4 py-16"
+    >
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="flex w-full flex-col items-center gap-3 px-5"
+      >
+        <div className="flex flex-col gap-1 text-center">
+          <h2 className="text-font-primary text-3xl font-bold">
+            Unggah, Kenali, dan Pelajari
+          </h2>
+          <p className="text-font-primary max-w-212.5 text-lg">
+            Daunesia membantumu mengenal kekayaan tanaman herbal Indonesia.
+            Unggah foto daun, akar, bunga, atau biji dan sistem kami akan
+            mengenalinya beserta nama lokal dan khasiatnya.
+          </p>
+        </div>
+      </motion.div>
 
-						{/* Login Suggestion */}
-						{!isLoggedIn && remainingTrials !== null && remainingTrials <= 2 && (
-							<div className="mt-3 p-3 bg-green-50 border border-green-light rounded-lg">
-								<p className="text-green-primary text-sm text-center">
-									💡 <strong>Tips:</strong> Login untuk mendapatkan percobaan tak terbatas dan fitur premium lainnya!
-								</p>
-							</div>
-						)}
-					</div>
+      {/* Deteksi Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
+        className="mx-auto max-w-7xl flex flex-col-reverse gap-12 p-6 lg:flex-row lg:gap-20 rounded-2xl bg-gradient-to-r from-[#E7F3E7] to-[#B5D6B3] my-12"
+      >
+        {/* Left Column */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex w-full flex-col gap-4 lg:w-2/6"
+        >
+          <div className="bg-white p-6 rounded-xl shadow-lg">
+            {file ? (
+              <div className="border-green-primary flex p-2 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed">
+                <Image
+                  width={320}
+                  className="object-cover rounded-md max-h-64"
+                  height={0}
+                  alt="Gambar yang diunggah"
+                  src={URL.createObjectURL(file)}
+                />
+                <p className="text-green-secondary text-sm font-medium">
+                  {file.name}
+                </p>
+              </div>
+            ) : (
+              <motion.div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragging(true);
+                }}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDragging(false);
+                  const droppedFile = e.dataTransfer.files?.[0];
+                  if (droppedFile) {
+                    if (!droppedFile.type.startsWith("image/")) {
+                      alert("Hanya file gambar yang diperbolehkan.");
+                      return;
+                    }
+                    if (droppedFile.size > 2 * 1024 * 1024) {
+                      alert("Ukuran file maksimal 2MB.");
+                      return;
+                    }
+                    setfile(droppedFile);
+                  }
+                }}
+                className={`${
+                  isDragging
+                    ? "border-green-600 bg-green-50"
+                    : "border-green-primary"
+                } flex h-70 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed transition-all duration-200`}
+              >
+                <svg
+                  width="70"
+                  height="70"
+                  viewBox="0 0 98 98"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.2084 46.9583V14.2083C10.2084 11.9992 11.9992 10.2083 14.2084 10.2083H83.7917C86.0008 10.2083 87.7917 11.9992 87.7917 14.2083V83.7917C87.7917 86.0008 86.0008 87.7917 83.7917 87.7917H14.2084C11.9992 87.7917 10.2084 86.0008 10.2084 83.7917V63.2917"
+                    stroke="#537D5D"
+                    strokeWidth="4.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M16.3334 53.0833L28.9305 40.4862C29.8129 39.6038 31.2788 39.736 31.9891 40.7619L47.7665 63.5506C48.4312 64.5106 49.7735 64.6995 50.6773 63.9601L70.0575 48.104C70.8528 47.4533 72.0117 47.5111 72.7382 48.2377L87.7917 63.2917"
+                    stroke="#537D5D"
+                    strokeWidth="4.5"
+                    strokeLinecap="round"
+                  />
+                  <circle
+                    cx="67.375"
+                    cy="30.625"
+                    r="6.125"
+                    fill="#537D5D"
+                    stroke="#537D5D"
+                    strokeWidth="4.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
 
-					<div className="bg-white p-4 rounded-xl shadow-lg">
-						<div className="flex flex-col">
-							<h6 className="text-sm mb-2">Contoh Tanaman</h6>
-							<div className="flex flex-row gap-2">
-								{contohImages.map((img, i) => (
-									<img
-										key={i}
-										src={img.imgSrc}
-										alt=""
-										width={114}
-										onClick={() => handleClickContoh(img.imgSrc, img.name)}
-										className="cursor-pointer hover:scale-102 transition-transform rounded-sm"
-									/>
-								))}
-							</div>
-						</div>
-					</div>
+                <div className="inline-flex flex-col items-center justify-start">
+                  <div className="text-green-secondary text-center font-medium">
+                    Unggah gambar tanaman
+                  </div>
+                  <div className="text-center text-green-secondary text-sm">
+                    Seret atau{" "}
+                    <label
+                      htmlFor="file"
+                      className="font-medium hover:text-green-primary hover:underline transition-colors duration-200 cursor-pointer"
+                    >
+                      unggah gambar
+                    </label>
+                  </div>
+                  <input
+                    onChange={(e) => {
+                      const selectedFile = e.target.files?.[0];
+                      if (!selectedFile) return;
+                      if (!selectedFile.type.startsWith("image/")) {
+                        alert("Hanya file gambar yang diperbolehkan.");
+                        return;
+                      }
+                      if (selectedFile.size > 2 * 1024 * 1024) {
+                        alert("Ukuran file maksimal 2MB.");
+                        return;
+                      }
+                      setfile(selectedFile);
+                    }}
+                    type="file"
+                    id="file"
+                    className="hidden"
+                    accept="image/*"
+                  />
+                </div>
+              </motion.div>
+            )}
 
+            {/* Progress Bar */}
+            {isLoading && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-4"
+              >
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-green-secondary h-2 rounded-full transition-all duration-300"
+                    style={{
+                      width: `${
+                        uploadProgress === 100 ? 100 : uploadProgress
+                      }%`,
+                    }}
+                  ></div>
+                </div>
+                <p className="text-green-secondary text-sm mt-2 text-center">
+                  {uploadProgress === 100
+                    ? "Sedang memproses gambar..."
+                    : uploadProgress > 0
+                    ? `Mengunggah... ${uploadProgress}%`
+                    : "Memproses gambar..."}
+                </p>
+              </motion.div>
+            )}
 
-					{/* Label Akurasi, Sisa Percobaan, dan Akses Login */}
-					<div className="flex flex-row flex-wrap gap-3">
+            {/* Error Message */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-4 p-3 bg-red-100 border border-red-300 rounded-lg"
+              >
+                <p className="text-red-600 text-sm">{error}</p>
+              </motion.div>
+            )}
 
-						{/* Remaining Trials Counter (Non-Logged-in) */}
-						{!isLoggedIn && remainingTrials !== null && (
-							<motion.div
-								initial={{ opacity: 0, y: 10 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true }}
-								transition={{ duration: 0.5, delay: 0.3 }}
-								className="rounded-lg border-l-4 border-green-secondary bg-white p-3 text-sm shadow-md max-w-max text-center"
-							>
-								<div className="flex items-center gap-2">
-									<svg className="h-5 w-5 text-green-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-									</svg>
-									<p className="text-font-primary font-semibold">
-										Percobaan Tersisa: {remainingTrials}
-									</p>
-								</div>
+            {/* Buttons */}
+            <div className="flex gap-2 mt-4">
+              <button
+                onClick={resetDeteksi}
+                disabled={isLoading}
+                className="cursor-pointer flex-1 flex items-center justify-center gap-2 rounded-full bg-green-secondary px-5 py-2 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-primary transition-colors"
+              >
+                Bersihkan
+              </button>
+              <button
+                onClick={mulaiDeteksi}
+                disabled={
+                  !file || isLoading || (!isLoggedIn && remainingTrials === 0)
+                }
+                className="flex-1 cursor-pointer flex items-center justify-center gap-2 rounded-full border-2 border-green-secondary bg-white px-5 py-2 text-green-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-50 transition-colors"
+              >
+                {isLoading ? "Memproses..." : "Mulai Deteksi"}
+              </button>
+            </div>
 
-								{remainingTrials === 0 && (
-									<p className="text-xs text-red-600">
-										Limit tercapai. Silakan login untuk melanjutkan.
-									</p>
-								)}
+            {/* Login Suggestion */}
+            {!isLoggedIn &&
+              remainingTrials !== null &&
+              remainingTrials <= 2 && (
+                <div className="mt-3 p-3 bg-green-50 border border-green-light rounded-lg">
+                  <p className="text-green-primary text-sm text-center">
+                    💡 <strong>Tips:</strong> Login untuk mendapatkan percobaan
+                    tak terbatas dan fitur premium lainnya!
+                  </p>
+                </div>
+              )}
+          </div>
 
-								{remainingTrials > 0 && remainingTrials <= 2 && (
-									<p className="text-xs text-orange-600">
-										Segera login untuk percobaan lebih banyak.
-									</p>
-								)}
-							</motion.div>
-						)}
+          <div className="bg-white p-4 rounded-xl shadow-lg">
+            <div className="flex flex-col">
+              <h6 className="text-sm mb-2">Contoh Tanaman</h6>
+              <div className="flex flex-row gap-2">
+                {contohImages.map((img, i) => (
+                  <img
+                    key={i}
+                    src={img.imgSrc}
+                    alt=""
+                    width={114}
+                    onClick={() => handleClickContoh(img.imgSrc, img.name)}
+                    className="cursor-pointer hover:scale-102 transition-transform rounded-sm"
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
 
-						{/* Logged-in Success Message */}
-						{isLoggedIn && (
-							<motion.div
-								initial={{ opacity: 0, y: 10 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true }}
-								transition={{ duration: 0.5, delay: 0.3 }}
-								className="rounded-lg border-l-4 border-green-secondary bg-green-50 p-3 text-sm shadow-md max-w-max text-center"
-							>
-								<div className="flex items-center gap-2">
-									<svg className="h-5 w-5 text-green-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-									</svg>
-									<p className="text-sm font-semibold text-green-secondary">
-										Akses Tidak Terbatas
-									</p>
-								</div>
-							</motion.div>
-						)}
+          {/* Label Akurasi, Sisa Percobaan, dan Akses Login */}
+          <div className="flex flex-row flex-wrap gap-3">
+            {/* Remaining Trials Counter (Non-Logged-in) */}
+            {!isLoggedIn && remainingTrials !== null && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="rounded-lg border-l-4 border-green-secondary bg-white p-3 text-sm shadow-md max-w-max text-center"
+              >
+                <div className="flex items-center gap-2">
+                  <svg
+                    className="h-5 w-5 text-green-secondary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <p className="text-font-primary font-semibold">
+                    Percobaan Tersisa: {remainingTrials}
+                  </p>
+                </div>
 
-						{/* Accuracy Label */}
-						<motion.div
-							initial={{ opacity: 0, y: 10 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.5, delay: 0.2 }}
-							className="flex items-center gap-2 rounded-lg bg-white p-2 text-sm shadow-md max-w-max text-center"
-						>
-							<img src={accurationIcons.src} alt="Akurasi" className="h-5 w-5" />
-							<p className="text-font-primary font-semibold">98% Akurat.</p>
-						</motion.div>
+                {remainingTrials === 0 && (
+                  <p className="text-xs text-red-600">
+                    Limit tercapai. Silakan login untuk melanjutkan.
+                  </p>
+                )}
 
+                {remainingTrials > 0 && remainingTrials <= 2 && (
+                  <p className="text-xs text-orange-600">
+                    Segera login untuk percobaan lebih banyak.
+                  </p>
+                )}
+              </motion.div>
+            )}
 
-					</div>
+            {/* Logged-in Success Message */}
+            {isLoggedIn && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="rounded-lg border-l-4 border-green-secondary bg-green-50 p-3 text-sm shadow-md max-w-max text-center"
+              >
+                <div className="flex items-center gap-2">
+                  <svg
+                    className="h-5 w-5 text-green-secondary"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <p className="text-sm font-semibold text-green-secondary">
+                    Akses Tidak Terbatas
+                  </p>
+                </div>
+              </motion.div>
+            )}
 
-				</motion.div>
-				{/* Right Column */}
-				<AnimatePresence mode="wait">
-					{!result && (
-						<motion.div key="default-content" exit={{ opacity: 0, y: 30 }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="flex w-full flex-col gap-4 lg:w-5/8">
-							<h3 className="text-font-primary text-2xl font-bold">Tanaman Herbal yang Dapat Dikenali</h3>
-							<Image width={768} src={contohDeteksi.src} alt="Contoh tanaman herbal yang dapat dikenali" height={0} />
-						</motion.div>
-					)}
-					{result && (
-						<motion.div key="result-content" exit={{ opacity: 0, y: 30 }} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="flex w-full flex-col gap-4 lg:w-5/8">
-							<h3 className="text-font-primary text-2xl font-bold">Hasil Deteksi</h3>
-							<div className="bg-white p-6 rounded-xl shadow-lg">
-								<div className="flex flex-col gap-4">
-									<div className="border-b pb-4">
-										<h4 className="text-green-secondary text-xl font-bold mb-2">{plantName || result.data[0]?.label || "Tanaman Terdeteksi"}</h4>
-										<p className="text-font-primary text-sm">Tanaman berhasil diidentifikasi dengan tingkat kepercayaan tinggi</p>
-									</div>
+            {/* Accuracy Label */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex items-center gap-2 rounded-lg bg-white p-2 text-sm shadow-md max-w-max text-center"
+            >
+              <img
+                src={accurationIcons.src}
+                alt="Akurasi"
+                className="h-5 w-5"
+              />
+              <p className="text-font-primary font-semibold">98% Akurat.</p>
+            </motion.div>
+          </div>
+        </motion.div>
+        {/* Right Column */}
+        <AnimatePresence mode="wait">
+          {!result && (
+            <motion.div
+              key="default-content"
+              exit={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex w-full flex-col gap-4 lg:w-5/8"
+            >
+              <h3 className="text-font-primary text-2xl font-bold">
+                Tanaman Herbal yang Dapat Dikenali
+              </h3>
+              <Image
+                width={768}
+                src={contohDeteksi.src}
+                alt="Contoh tanaman herbal yang dapat dikenali"
+                height={0}
+              />
+            </motion.div>
+          )}
+          {result && (
+            <motion.div
+              key="result-content"
+              exit={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex w-full flex-col gap-4 lg:w-5/8"
+            >
+              <h3 className="text-font-primary text-2xl font-bold">
+                Hasil Deteksi
+              </h3>
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <div className="flex flex-col gap-4">
+                  <div className="border-b pb-4">
+                    <h4 className="text-green-secondary text-xl font-bold mb-2">
+                      {plantName ||
+                        result.data[0]?.label ||
+                        "Tanaman Terdeteksi"}
+                    </h4>
+                    <p className="text-font-primary text-sm">
+                      Tanaman berhasil diidentifikasi dengan tingkat kepercayaan
+                      tinggi
+                    </p>
+                  </div>
 
-									<div className="space-y-3">
-										<h5 className="text-font-primary font-semibold">Tingkat Kepercayaan:</h5>
-										{result.data[0]?.confidences?.map((confidence, index) => (
-											<div key={index} className="flex items-center justify-between">
-												<span className="text-font-primary text-sm">{confidence.label}</span>
-												<div className="flex items-center gap-2">
-													<div className="w-24 bg-gray-200 rounded-full h-2">
-														<div className="bg-green-secondary h-2 rounded-full transition-all duration-300" style={{ width: `${confidence.confidence * 100}%` }}></div>
-													</div>
-													<span className="text-green-secondary text-sm font-medium">{(confidence.confidence * 100).toFixed(1)}%</span>
-												</div>
-											</div>
-										))}
-									</div>
+                  <div className="space-y-3">
+                    <h5 className="text-font-primary font-semibold">
+                      Tingkat Kepercayaan:
+                    </h5>
+                    {result.data[0]?.confidences?.map((confidence, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between"
+                      >
+                        <span className="text-font-primary text-sm">
+                          {confidence.label}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <div className="w-24 bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-green-secondary h-2 rounded-full transition-all duration-300"
+                              style={{
+                                width: `${confidence.confidence * 100}%`,
+                              }}
+                            ></div>
+                          </div>
+                          <span className="text-green-secondary text-sm font-medium">
+                            {(confidence.confidence * 100).toFixed(1)}%
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
-									{/* Plant Description */}
-									{plantDescription && (
-										<div className="border-t pt-4">
-											<h5 className="text-font-primary font-semibold mb-3">Deskripsi & Manfaat:</h5>
-											<div className="prose prose-sm max-w-none">
-												<div
-													className="text-font-primary text-sm leading-relaxed whitespace-pre-wrap"
-													dangerouslySetInnerHTML={{
-														__html: plantDescription.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\*(.*?)\*/g, "<em>$1</em>"),
-													}}
-												/>
-											</div>
-										</div>
-									)}
-								</div>
-							</div>
-						</motion.div>
-					)}
-				</AnimatePresence>
-			</motion.div>
-		</motion.section>
-	);
+                  {/* Plant Description */}
+                  {plantDescription && (
+                    <div className="border-t pt-4">
+                      <h5 className="text-font-primary font-semibold mb-3">
+                        Deskripsi & Manfaat:
+                      </h5>
+                      <div className="prose prose-sm max-w-none">
+                        <div
+                          className="text-font-primary text-sm leading-relaxed whitespace-pre-wrap"
+                          dangerouslySetInnerHTML={{
+                            __html: plantDescription
+                              .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                              .replace(/\*(.*?)\*/g, "<em>$1</em>"),
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </motion.section>
+  );
 }
