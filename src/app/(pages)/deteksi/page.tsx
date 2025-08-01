@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import axios from "axios";
 import Image from "next/image";
+import { getPlantImagesFromTebi } from "@/lib/tebi";
 
 import contohDeteksi from "@/assets/images/contohDeteksi.svg";
 import _searchIcons from "@/assets/icons/searchIcons.svg";
@@ -63,6 +64,8 @@ export default function DeteksiPage() {
 	const [uploadProgress, setUploadProgress] = useState(0);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [plantImages, setPlantImages] = useState<string[]>([]);
+	const [loadingImages, setLoadingImages] = useState(false);
 
 	async function checkRemainingTrials() {
 		try {
@@ -74,12 +77,32 @@ export default function DeteksiPage() {
 		}
 	}
 
+	// Function to load plant images when plantName changes
+	const loadPlantImages = async (plantName: string) => {
+		if (!plantName || plantName === "Gambar tidak terdeteksi sebagai tanaman.") {
+			setPlantImages([]);
+			return;
+		}
+
+		setLoadingImages(true);
+		try {
+			const images = await getPlantImagesFromTebi(plantName);
+			setPlantImages(images);
+		} catch (error) {
+			console.error("Error loading plant images:", error);
+			setPlantImages([]);
+		} finally {
+			setLoadingImages(false);
+		}
+	};
+
 	async function mulaiDeteksi(): Promise<any> {
 		if (!file) return;
 
 		setIsLoading(true);
 		setError(null);
 		setUploadProgress(0);
+		setPlantImages([]); // Clear previous images
 
 		const formData = new FormData();
 		formData.append("file", file);
@@ -107,8 +130,16 @@ export default function DeteksiPage() {
 
 			// Extract plant name and description from the data array
 			if (result.data && result.data.length >= 3) {
-				setPlantName(result.data[1] || "");
-				setPlantDescription(result.data[2] || "");
+				const detectedPlantName = result.data[1] || "";
+				const detectedPlantDescription = result.data[2] || "";
+				
+				setPlantName(detectedPlantName);
+				setPlantDescription(detectedPlantDescription);
+				
+				// Load plant images after setting plant name
+				if (detectedPlantName && detectedPlantName !== "Gambar tidak terdeteksi sebagai tanaman.") {
+					loadPlantImages(detectedPlantName);
+				}
 			}
 		} catch (error) {
 			console.error("Error saat deteksi:", error);
@@ -139,6 +170,7 @@ export default function DeteksiPage() {
 		setResult(null);
 		setPlantName("");
 		setPlantDescription("");
+		setPlantImages([]); // Clear plant images
 		setError(null);
 		setUploadProgress(0);
 	}
@@ -415,39 +447,127 @@ export default function DeteksiPage() {
 							<h3 className="text-font-primary text-2xl font-bold">Hasil Deteksi</h3>
 							<div className="bg-white p-6 rounded-xl shadow-lg">
 								<div className="flex flex-col gap-4">
-									<div className="border-b pb-4">
-										<h4 className="text-green-secondary text-xl font-bold mb-2">{plantName || result.data[0]?.label || "Tanaman Terdeteksi"}</h4>
-										<p className="text-font-primary text-sm">Tanaman berhasil diidentifikasi dengan tingkat kepercayaan tinggi</p>
-									</div>
-
-									<div className="space-y-3">
-										<h5 className="text-font-primary font-semibold">Tingkat Kepercayaan:</h5>
-										{result.data[0]?.confidences?.map((confidence, index) => (
-											<div key={index} className="flex items-center justify-between">
-												<span className="text-font-primary text-sm">{confidence.label}</span>
-												<div className="flex items-center gap-2">
-													<div className="w-24 bg-gray-200 rounded-full h-2">
-														<div className="bg-green-secondary h-2 rounded-full transition-all duration-300" style={{ width: `${confidence.confidence * 100}%` }}></div>
+									{plantName === "Gambar tidak terdeteksi sebagai tanaman." ? (
+										// Not a plant detected
+										<>
+											<div className="border-b pb-4">
+												<div className="flex items-center gap-3 mb-3">
+													<div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+														<svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+														</svg>
 													</div>
-													<span className="text-green-secondary text-sm font-medium">{(confidence.confidence * 100).toFixed(1)}%</span>
+													<div>
+														<h4 className="text-red-500 text-xl font-bold mb-1">Tanaman Tidak Terdeteksi</h4>
+														<p className="text-font-primary text-sm">Sepertinya gambar yang Anda upload bukan tanaman</p>
+													</div>
 												</div>
 											</div>
-										))}
-									</div>
 
-									{/* Plant Description */}
-									{plantDescription && (
-										<div className="border-t pt-4">
-											<h5 className="text-font-primary font-semibold mb-3">Deskripsi & Manfaat:</h5>
-											<div className="prose prose-sm max-w-none">
-												<div
-													className="text-font-primary text-sm leading-relaxed whitespace-pre-wrap"
-													dangerouslySetInnerHTML={{
-														__html: plantDescription.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\*(.*?)\*/g, "<em>$1</em>"),
-													}}
-												/>
+											<div className="bg-red-50 border border-red-200 rounded-lg p-4">
+												<h5 className="text-red-700 font-semibold mb-2">Tips untuk hasil yang lebih baik:</h5>
+												<ul className="text-red-600 text-sm space-y-1 list-disc list-inside">
+													<li>Pastikan gambar menampilkan daun, bunga, buah, atau bagian tanaman dengan jelas</li>
+													<li>Gunakan pencahayaan yang cukup dan fokus yang tajam</li>
+													<li>Hindari gambar yang terlalu gelap atau buram</li>
+													<li>Coba atur jarak pengambilan foto</li>
+												</ul>
 											</div>
-										</div>
+
+											<div className="text-center">
+												<button
+													onClick={resetDeteksi}
+													className="cursor-pointer inline-flex items-center gap-2 rounded-full bg-red-500 px-6 py-2 text-white hover:bg-red-600 transition-colors"
+												>
+													<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+													</svg>
+													Coba Lagi
+												</button>
+											</div>
+										</>
+									) : (
+										// Plant detected
+										<>
+											<div className="border-b pb-4">
+												<h4 className="text-green-secondary text-xl font-bold mb-2">{plantName || result.data[0]?.label || "Tanaman Terdeteksi"}</h4>
+												<p className="text-font-primary text-sm">Tanaman berhasil diidentifikasi dengan tingkat kepercayaan tinggi</p>
+											</div>
+
+											<div className="space-y-3">
+												<h5 className="text-font-primary font-semibold">Tingkat Kepercayaan:</h5>
+												{result.data[0]?.confidences?.map((confidence, index) => (
+													<div key={index} className="flex items-center justify-between">
+														<span className="text-font-primary text-sm">{confidence.label}</span>
+														<div className="flex items-center gap-2">
+															<div className="w-24 bg-gray-200 rounded-full h-2">
+																<div className="bg-green-secondary h-2 rounded-full transition-all duration-300" style={{ width: `${confidence.confidence * 100}%` }}></div>
+															</div>
+															<span className="text-green-secondary text-sm font-medium">{(confidence.confidence * 100).toFixed(1)}%</span>
+														</div>
+													</div>
+												))}
+											</div>
+
+											{/* Plant Description */}
+											{plantDescription && (
+												<div className="border-t pt-4">
+													<h5 className="text-font-primary font-semibold mb-3">Deskripsi & Manfaat:</h5>
+													<div className="prose prose-sm max-w-none">
+														<div
+															className="text-font-primary text-sm leading-relaxed whitespace-pre-wrap"
+															dangerouslySetInnerHTML={{
+																__html: plantDescription.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\*(.*?)\*/g, "<em>$1</em>"),
+															}}
+														/>
+													</div>
+												</div>
+											)}
+
+											{/* Plant Images Section */}
+											<div className="border-t pt-4">
+												<h5 className="text-font-primary font-semibold mb-3">Galeri Tanaman:</h5>
+												
+												{loadingImages ? (
+													<div className="flex items-center justify-center py-8">
+														<div className="flex items-center gap-2">
+															<div className="w-4 h-4 border-2 border-green-secondary border-t-transparent rounded-full animate-spin"></div>
+															<span className="text-green-secondary text-sm">Memuat gambar tanaman...</span>
+														</div>
+													</div>
+												) : plantImages.length > 0 ? (
+													<div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+														{plantImages.map((imageUrl, index) => (
+															<motion.div
+																key={index}
+																initial={{ opacity: 0, scale: 0.9 }}
+																animate={{ opacity: 1, scale: 1 }}
+																transition={{ duration: 0.3, delay: index * 0.1 }}
+																className="relative group cursor-pointer"
+															>
+																<img
+																	src={imageUrl}
+																	alt={`${plantName} - Gambar ${index + 1}`}
+																	className="w-full h-32 object-cover rounded-lg shadow-md group-hover:shadow-lg transition-shadow duration-200"
+																	onClick={() => {
+																		// Optional: Open image in modal/lightbox
+																		window.open(imageUrl, '_blank');
+																	}}
+																/>
+																<div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-200"></div>
+															</motion.div>
+														))}
+													</div>
+												) : (
+													<div className="text-center py-6 bg-gray-50 rounded-lg">
+														<svg className="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+														</svg>
+														<p className="text-gray-500 text-sm">Gambar tanaman tidak tersedia</p>
+													</div>
+												)}
+											</div>
+										</>
 									)}
 								</div>
 							</div>
