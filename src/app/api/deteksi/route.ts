@@ -63,11 +63,47 @@ export const POST = async (req: NextRequest) => {
 
 		const buffer = await file.arrayBuffer();
 		const app = await Client.connect("GwFirman/Daunesia");
+		// Define the expected structure of result.data
+		type PredictionResult = [
+			{
+				confidences?: { confidence?: number }[];
+			},
+			string
+		];
+
 		const result = await app.predict("/predict", [handle_file(Buffer.from(buffer))]);
 
+		// Save detection to database if user is logged in
+		if (session?.user && result?.data) {
+			try {
+				const data = result.data as PredictionResult;
+				const plantName = data[1] || "Tanaman tidak dikenal";
+				const rawConfidence = data[0]?.confidences?.[0]?.confidence || 0;
+				
+				// ✅ Fix: Convert ke percentage (0.958 -> 95.8)
+				const confidencePercentage = rawConfidence * 100;
+
+				await prisma.detection.create({
+					data: {
+						userId: session.user.id,
+						plantName: plantName,
+						confidence: confidencePercentage, // Store as percentage
+						imageUrl: null
+					}
+				});
+
+				console.log('✅ Detection saved to database');
+			} catch (dbError) {
+				console.error('❌ Error saving detection to database:', dbError);
+			}
+		}
+
 		return NextResponse.json({ success: true, result });
-	} catch {
+	} catch (error) {
+		console.error('Detection API error:', error);
 		return NextResponse.json({ error: "Terjadi kesalahan" }, { status: 500 });
+	} finally {
+		await prisma.$disconnect();
 	}
 };
 
