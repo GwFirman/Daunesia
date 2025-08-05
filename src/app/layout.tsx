@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
 	title: "Daunesia",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body className={`bg-background font-Helvetica_Neue text-foreground antialiased`}>{children}</body>
+			<Providers>
+				<body className={`bg-background font-Helvetica_Neue text-foreground antialiased`}>{children}</body>
+			</Providers>
 		</html>
 	);
 }
