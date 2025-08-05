@@ -82,7 +82,7 @@ export const GET = async (req: NextRequest) => {
           id: "1",
           title: "First Step",
           description: "Melakukan deteksi pertama",
-          icon: "🌱",
+          icon: "sprout",
           unlocked: detectionCount > 0,
           unlockedAt: detectionCount > 0 ? recentDetections[recentDetections.length - 1]?.createdAt.toISOString() : undefined,
           progress: detectionCount > 0 ? 100 : 0
@@ -91,7 +91,7 @@ export const GET = async (req: NextRequest) => {
           id: "2",
           title: "Plant Explorer",
           description: "Mengidentifikasi 5+ jenis tanaman",
-          icon: "🔍",
+          icon: "leaf",
           unlocked: uniquePlants.length >= 5,
           unlockedAt: uniquePlants.length >= 5 ? new Date().toISOString() : undefined,
           progress: Math.min((uniquePlants.length / 5) * 100, 100)
@@ -100,7 +100,7 @@ export const GET = async (req: NextRequest) => {
           id: "3",
           title: "Accuracy Master",
           description: "Mencapai akurasi rata-rata 90%+",
-          icon: "🎯",
+          icon: "badge",
           // ✅ Fix: Bandingkan dengan 90, bukan 0.9
           unlocked: (avgConfidence._avg.confidence || 0) >= 90,
           unlockedAt: (avgConfidence._avg.confidence || 0) >= 90 ? new Date().toISOString() : undefined,

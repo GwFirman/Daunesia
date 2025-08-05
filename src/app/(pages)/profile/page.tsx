@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { BarChart3, History, Trophy, Sprout, Leaf, BadgeCheck, Award } from "lucide-react";
 
 // Update interface untuk menghapus image
 interface UserStats {
@@ -18,7 +19,6 @@ interface UserStats {
     plantName: string;
     detectedAt: string;
     confidence: number;
-    // Hapus image property
   }>;
   achievements: Array<{
     id: string;
@@ -37,7 +37,7 @@ export default function ProfilePage() {
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const { data: session, isPending } = authClient.useSession();
   const router = useRouter();
 
@@ -62,10 +62,10 @@ export default function ProfilePage() {
     try {
       setLoading(true);
       setError(null);
-      
+
       console.log('🚀 Fetching user stats...');
       console.log('👤 Current session:', session?.user?.email);
-      
+
       const response = await fetch('/api/user/profile', {
         method: 'GET',
         credentials: 'include',
@@ -73,14 +73,14 @@ export default function ProfilePage() {
           'Content-Type': 'application/json',
         }
       });
-      
+
       console.log('📡 Response status:', response.status);
       console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('❌ API Error Response:', errorText);
-        
+
         if (response.status === 401) {
           console.log('🔒 Unauthorized - redirecting to login');
           router.push('/login');
@@ -88,21 +88,21 @@ export default function ProfilePage() {
         }
         throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
-      
+
       const data = await response.json();
       console.log('✅ Fetched user stats:', data);
-      
+
       if (data.recentDetections && data.recentDetections.length > 0) {
         console.log('📋 Recent detections found:', data.recentDetections.length);
       } else {
         console.log('📋 No recent detections found');
       }
-      
+
       setUserStats(data);
     } catch (error) {
       console.error('❌ Error fetching user stats:', error);
       setError(error instanceof Error ? error.message : 'Terjadi kesalahan');
-      
+
       // Set fallback empty data
       setUserStats({
         stats: {
@@ -181,12 +181,21 @@ export default function ProfilePage() {
     }
   };
 
+  const normalizeIcon = (icon: string = '') => icon.trim().toLowerCase();
+
+  const iconMap: Record<string, JSX.Element> = {
+    badge: <BadgeCheck size={28} />,
+    award: <Award size={28} />,
+    leaf: <Leaf size={28} />,
+    sprout: <Sprout size={28} />,
+  };
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}
       animate={mounted ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1] }}
-      className="mx-auto max-w-7xl w-full px-4 py-16"
+      className="mx-auto max-w-7xl w-full px-4 sm:px-6 md:px-8 py-10 md:py-16"
     >
       {/* Error Banner */}
       {error && (
@@ -209,22 +218,7 @@ export default function ProfilePage() {
         </motion.div>
       )}
 
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-12"
-      >
-        <h1 className="text-4xl font-bold text-font-primary mb-4">
-          Profil Pengguna
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Kelola profil dan lihat statistik deteksi tanaman Anda
-        </p>
-      </motion.div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8">
         {/* Profile Card */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -232,19 +226,19 @@ export default function ProfilePage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="lg:col-span-1"
         >
-          <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-8">
+          <div className="bg-white rounded-2xl shadow-sm p-6 sticky top-8">
             {/* Avatar & Basic Info */}
             <div className="text-center mb-6">
               <div className="relative inline-block mb-4">
                 <img
                   src={userData.avatar}
                   alt={userData.name}
-                  className="w-24 h-24 rounded-full object-cover border-4 border-green-100"
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-green-secondary"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face';
                   }}
                 />
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-primary rounded-full border-2 border-white flex items-center justify-center">
                   <span className="text-white text-xs">✓</span>
                 </div>
               </div>
@@ -252,37 +246,33 @@ export default function ProfilePage() {
                 {userData.name}
               </h2>
               <p className="text-gray-600 text-sm mb-2">{userData.email}</p>
-              <p className="text-gray-500 text-sm">📍 {userData.location}</p>
+              {/* <p className="text-gray-500 text-sm">📍 {userData.location}</p> */}
             </div>
 
-            {/* Bio */}
+            {/* Bio
             <div className="mb-6">
               <h3 className="font-semibold text-font-primary mb-2">Bio</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
                 {userData.bio}
               </p>
-            </div>
+            </div> */}
 
             {/* Join Date */}
-            <div className="border-t pt-4">
-              <p className="text-gray-500 text-sm">
-                📅 Bergabung sejak {formatDate(userData.joinDate)}
+            <div className="bg-[#FFF7ED] p-4 rounded-lg shadow-xs">
+              <p className="text-sm text-gray-600">
+                Bergabung sejak <span className="text-[#F97316] font-semibold">{formatDate(userData.joinDate)}</span>
               </p>
             </div>
 
             {/* Quick Stats */}
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <div className="text-center p-3 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">
-                  {userData.stats.totalDetections}
-                </div>
-                <div className="text-xs text-gray-600">Total Deteksi</div>
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <div className="text-center p-4 bg-[#ECFDF5] rounded-lg shadow-xs">
+                <div className="text-3xl font-bold text-[#10B981]">{userData.stats.totalDetections}</div>
+                <div className="mt-1 text-xs text-gray-600">Total Deteksi</div>
               </div>
-              <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">
-                  {userData.stats.accuracyRate}%
-                </div>
-                <div className="text-xs text-gray-600">Tingkat Akurasi</div>
+              <div className="text-center p-4 bg-[#EFF6FF] rounded-lg shadow-xs">
+                <div className="text-3xl font-bold text-[#3B82F6]">{userData.stats.accuracyRate}%</div>
+                <div className="mt-1 text-xs text-gray-600">Tingkat Akurasi</div>
               </div>
             </div>
           </div>
@@ -296,27 +286,29 @@ export default function ProfilePage() {
           className="lg:col-span-2"
         >
           {/* Tabs */}
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
             <div className="border-b border-gray-200">
-              <nav className="flex">
+              <nav className="flex overflow-x-auto scrollbar-hide">
                 {[
-                  { key: 'overview', label: 'Ringkasan', icon: '📊' },
-                  { key: 'history', label: 'Riwayat', icon: '🕒' },
-                  { key: 'achievements', label: 'Pencapaian', icon: '🏆' }
-                ].map((tab) => (
-                  <button
-                    key={tab.key}
-                    onClick={() => setActiveTab(tab.key as any)}
-                    className={`flex-1 px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                      activeTab === tab.key
-                        ? 'border-green-500 text-green-600 bg-green-50'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    <span className="mr-2">{tab.icon}</span>
-                    {tab.label}
-                  </button>
-                ))}
+                  { key: 'overview', label: 'Ringkasan', icon: BarChart3 },
+                  { key: 'history', label: 'Riwayat', icon: History },
+                  { key: 'achievements', label: 'Pencapaian', icon: Trophy },
+                ].map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.key}
+                      onClick={() => setActiveTab(tab.key as any)}
+                      className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors cursor-pointer ${activeTab === tab.key
+                        ? 'border-green-secondary text-green-primary bg-green-50'
+                        : 'border-transparent text-gray-500 hover:text-green-primary hover:bg-gray-50'
+                        }`}
+                    >
+                      <Icon className="w-4 h-4 text-green-primary" />
+                      {tab.label}
+                    </button>
+                  );
+                })}
               </nav>
             </div>
 
@@ -329,25 +321,35 @@ export default function ProfilePage() {
                   transition={{ duration: 0.4 }}
                 >
                   <h3 className="text-xl font-bold text-font-primary mb-6">Statistik Deteksi</h3>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-xl">
-                      <div className="text-3xl font-bold mb-2">{userData.stats.totalDetections}</div>
-                      <div className="text-green-100">Total Deteksi</div>
+                    {/* Total Deteksi */}
+                    <div className="bg-[#DFF9EC] text-[#15803D] p-6 rounded-xl shadow-sm">
+                      <div className="text-2xl md:text-3xl font-bold mb-2">{userData.stats.totalDetections}</div>
+                      <div className="text-sm font-medium">Total Deteksi</div>
                     </div>
-                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+
+                    {/* Tanaman Teridentifikasi */}
+                    <div className="bg-[#D9F5EF] text-[#0F766E] p-6 rounded-xl shadow-sm">
                       <div className="text-3xl font-bold mb-2">{userData.stats.plantsIdentified}</div>
-                      <div className="text-blue-100">Tanaman Teridentifikasi</div>
+                      <div className="text-sm font-medium">Tanaman Teridentifikasi</div>
                     </div>
-                    <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-xl">
+
+                    {/* Tingkat Akurasi */}
+                    <div className="bg-[#E6F4E1] text-[#4D7C0F] p-6 rounded-xl shadow-sm">
                       <div className="text-3xl font-bold mb-2">{userData.stats.accuracyRate}%</div>
-                      <div className="text-purple-100">Tingkat Akurasi</div>
+                      <div className="text-sm font-medium">Tingkat Akurasi</div>
                     </div>
                   </div>
 
-                  <div className="bg-gray-50 p-6 rounded-xl">
-                    <h4 className="font-semibold text-font-primary mb-2">Kategori Favorit</h4>
-                    <p className="text-gray-600">🌿 {userData.stats.favoriteCategory}</p>
+                  <div className="bg-[#ECFDF5] p-6 rounded-xl flex items-start gap-4 shadow-sm">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#D1FAE5] text-green-600">
+                      <Sprout size={20} />
+                    </div>
+                    <div>
+                      <h4 className="text-font-primary font-semibold ">Kategori Favorit</h4>
+                      <p className="text-sm text-gray-600">{userData.stats.favoriteCategory}</p>
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -360,23 +362,25 @@ export default function ProfilePage() {
                   transition={{ duration: 0.4 }}
                 >
                   <h3 className="text-xl font-bold text-font-primary mb-6">Riwayat Deteksi Terbaru</h3>
-                  
+
                   {userData.recentDetections.length > 0 ? (
-                    <div className="space-y-4">
+                    <div className="space-y-2">
                       {userData.recentDetections.map((detection) => (
-                        <div key={detection.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div
+                          key={detection.id}
+                          className="flex items-center justify-between p-4 bg-[#DFF9EC] rounded-lg transition-colors"
+                        >
                           <div className="flex items-center gap-4">
-                            {/* Plant Icon instead of image */}
-                            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                              <span className="text-2xl">🌱</span>
+                            <div className="w-12 h-12 bg-[#C8E8D4] rounded-full flex items-center justify-center text-[#2F6846]">
+                              <Sprout size={22} />
                             </div>
                             <div>
                               <h4 className="font-semibold text-font-primary">{detection.plantName}</h4>
-                              <p className="text-sm text-gray-600">{formatDateTime(detection.detectedAt)}</p>
+                              <p className="text-sm text-[#15803D]">{formatDateTime(detection.detectedAt)}</p>
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-sm font-medium text-green-600">
+                            <div className="text-sm font-medium text-[#15803D]">
                               {detection.confidence}% akurat
                             </div>
                             <div className="text-xs text-gray-500">
@@ -387,15 +391,21 @@ export default function ProfilePage() {
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center py-12 text-gray-500">
-                      <div className="text-4xl mb-4">🔍</div>
-                      <p className="text-lg mb-2">Belum ada riwayat deteksi</p>
-                      <p className="text-sm">Mulai deteksi tanaman pertama Anda!</p>
+                    <div className="text-center py-12 px-6 bg-[#EDF6F3] border border-[#D3EADD] rounded-xl text-[#2F6846] shadow-sm">
+                      <div className="mb-4 flex justify-center">
+                        <Leaf size={44} className="text-[#4B8063]" strokeWidth={1.25} />
+                      </div>
+                      <p className="text-lg mb-2 font-semibold text-[#36644F]">
+                        Belum ada riwayat deteksi
+                      </p>
+                      <p className="text-sm text-[#4B6E5D]">
+                        Mulai deteksi tanaman pertamamu sekarang dan lihat hasilnya di sini!
+                      </p>
                     </div>
                   )}
 
                   <div className="mt-6 text-center">
-                    <button className="px-6 py-2 bg-green-secondary text-white rounded-full hover:bg-green-primary transition-colors">
+                    <button className="px-6 py-2 bg-green-secondary text-white rounded-xl hover:bg-green-primary transition-colors">
                       Lihat Semua Riwayat
                     </button>
                   </div>
@@ -410,43 +420,55 @@ export default function ProfilePage() {
                   transition={{ duration: 0.4 }}
                 >
                   <h3 className="text-xl font-bold text-font-primary mb-6">Pencapaian</h3>
-                  
+
                   {userData.achievements.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {userData.achievements.map((achievement) => (
                         <div
                           key={achievement.id}
-                          className={`p-6 rounded-xl border-2 transition-all ${
-                            achievement.unlocked
-                              ? 'border-green-200 bg-green-50'
-                              : 'border-gray-200 bg-gray-50'
-                          }`}
+                          className={`p-6 rounded-xl border transition-all ${achievement.unlocked
+                            ? 'bg-[#ECFDF5] border-[#D1FAE5]'
+                            : 'bg-[#F8FAF9] border-gray-200'
+                            }`}
                         >
                           <div className="flex items-start gap-4">
-                            <div className={`text-3xl ${achievement.unlocked ? '' : 'grayscale opacity-50'}`}>
-                              {achievement.icon}
+                            <div
+                              className={`p-2 rounded-lg ${achievement.unlocked
+                                ? 'bg-[#BBF7D0] text-green-primary'
+                                : 'bg-gray-200 text-gray-400 grayscale opacity-60'
+                                }`}
+                            >
+
+                              {iconMap[normalizeIcon(achievement.icon)]}
                             </div>
+
                             <div className="flex-1">
-                              <h4 className={`font-semibold mb-1 ${
-                                achievement.unlocked ? 'text-font-primary' : 'text-gray-500'
-                              }`}>
+                              <h4
+                                className={`font-semibold mb-1 ${achievement.unlocked ? 'text-font-primary' : 'text-gray-500'
+                                  }`}
+                              >
                                 {achievement.title}
                               </h4>
-                              <p className={`text-sm mb-2 ${
-                                achievement.unlocked ? 'text-gray-600' : 'text-gray-400'
-                              }`}>
+                              <p
+                                className={`text-sm mb-2 ${achievement.unlocked ? 'text-gray-600' : 'text-gray-400'
+                                  }`}
+                              >
                                 {achievement.description}
                               </p>
+
                               {achievement.unlocked ? (
-                                <p className="text-xs text-green-600 font-medium">
-                                  ✅ Dibuka pada {achievement.unlockedAt ? formatDate(achievement.unlockedAt) : 'Tanggal tidak tersedia'}
+                                <p className="text-xs text-green-primary font-medium">
+                                  Dibuka pada{' '}
+                                  {achievement.unlockedAt
+                                    ? formatDate(achievement.unlockedAt)
+                                    : 'Tanggal tidak tersedia'}
                                 </p>
                               ) : (
                                 <div className="text-xs text-gray-500">
                                   Progress: {achievement.progress || 0}/100
                                   <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                                     <div
-                                      className="bg-green-500 h-2 rounded-full transition-all"
+                                      className="bg-green-primary h-2 rounded-full transition-all"
                                       style={{ width: `${achievement.progress || 0}%` }}
                                     ></div>
                                   </div>
@@ -458,10 +480,16 @@ export default function ProfilePage() {
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center py-12 text-gray-500">
-                      <div className="text-4xl mb-4">🏆</div>
-                      <p className="text-lg mb-2">Belum ada pencapaian</p>
-                      <p className="text-sm">Mulai gunakan aplikasi untuk membuka pencapaian!</p>
+                    <div className="text-center py-12 px-6 bg-[#ECFDF5] border border-[#D1FAE5] rounded-xl text-green-800 shadow-sm">
+                      <div className="mb-4 flex justify-center">
+                        <Award size={48} className="text-green-600" strokeWidth={1.5} />
+                      </div>
+                      <p className="text-lg mb-2 font-semibold text-green-700">
+                        Belum ada pencapaian
+                      </p>
+                      <p className="text-sm text-green-600">
+                        Mulai gunakan aplikasi untuk membuka pencapaian pertama!
+                      </p>
                     </div>
                   )}
                 </motion.div>

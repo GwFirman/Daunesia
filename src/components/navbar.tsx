@@ -75,44 +75,23 @@ const Navbars = () => {
                                 </Link>
                             </motion.div>
                         </div>
-                        <div />
-                        <div />
-                        <div />
+
                         <div className="flex items-center gap-4">
                             {data ? (
-                                <div className="relative" ref={dropdownRef}>
-                                    {/* Profile Button */}
-                                    <button
-                                        onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
-                                    >
-                                        <img
-                                            src={data.user.image || defaultAvatar}
-                                            alt={data.user.name || 'User'}
-                                            className="w-8 h-8 rounded-full object-cover border-2 border-green-200"
-                                            onError={(e) => {
-                                                (e.target as HTMLImageElement).src = defaultAvatar;
-                                            }}
-                                        />
-                                        <div className="hidden md:block text-left">
-                                            <p className="text-sm font-medium text-font-primary">
-                                                {data.user.name || 'User'}
-                                            </p>
-                                            <p className="text-xs text-gray-500">
-                                                {data.user.email}
-                                            </p>
-                                        </div>
-                                        <svg
-                                            className={`w-4 h-4 text-gray-400 transition-transform ${
-                                                isProfileDropdownOpen ? 'rotate-180' : ''
-                                            }`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </button>
+                                <div
+                                    onMouseEnter={() => setIsProfileDropdownOpen(true)}
+                                    onMouseLeave={() => setIsProfileDropdownOpen(false)}
+                                    className="relative flex items-center p-2 rounded-lg cursor-pointer"
+                                >
+                                    {/* Profile Image Only */}
+                                    <img
+                                        src={data.user.image || defaultAvatar}
+                                        alt={data.user.name || 'User'}
+                                        className="w-9 h-9 rounded-full object-cover border-2 border-green-secondary"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).src = defaultAvatar;
+                                        }}
+                                    />
 
                                     {/* Dropdown Menu */}
                                     <AnimatePresence>
@@ -122,9 +101,9 @@ const Navbars = () => {
                                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
                                                 transition={{ duration: 0.2 }}
-                                                className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50"
+                                                className="absolute left-0 top-13 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50"
                                             >
-                                                {/* User Info Header */}
+                                                {/* Info Header */}
                                                 <div className="px-4 py-3 border-b border-gray-100">
                                                     <div className="flex items-center gap-3">
                                                         <img
@@ -146,11 +125,10 @@ const Navbars = () => {
                                                     </div>
                                                 </div>
 
-                                                {/* Menu Items */}
+                                                {/* Menu Actions */}
                                                 <div className="py-2">
                                                     <Link
                                                         href="/profile"
-                                                        onClick={() => setIsProfileDropdownOpen(false)}
                                                         className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                                                     >
                                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,11 +136,7 @@ const Navbars = () => {
                                                         </svg>
                                                         Lihat Profil
                                                     </Link>
-                                                    
-                                                   
-
                                                     <div className="border-t border-gray-100 my-2"></div>
-
                                                     <button
                                                         onClick={handleSignOut}
                                                         className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors w-full text-left"
@@ -178,12 +152,21 @@ const Navbars = () => {
                                     </AnimatePresence>
                                 </div>
                             ) : (
-                                <Link className="text-font-primary relative text-base" href={"/login"}>
-                                    <p className="relative">Masuk</p>
+                                <Link
+                                    href="/login"
+                                    className="rounded-xl border border-green-primary px-4 py-1.5 text-green-primary hover:bg-green-50 transition-colors"
+                                >
+                                    Masuk
                                 </Link>
                             )}
-                            <Link className="bg-green-primary flex h-10 items-center rounded-xl px-5.5 font-medium text-white" href={"/deteksi"}>
+                            {/* <Link className="bg-green-primary flex h-10 items-center rounded-xl px-5.5 font-medium text-white" href={"/deteksi"}>
                                 Mulai Sekarang
+                            </Link> */}
+                            <Link
+                                href="/deteksi"
+                                className="bg-green-primary flex h-10 items-center rounded-xl px-5.5 font-medium text-white"
+                            >
+                                {data ? "Deteksi Sekarang" : "Mulai Sekarang"}
                             </Link>
                         </div>
                     </div>
@@ -209,32 +192,15 @@ const Navbars = () => {
                         <span className="block">Deteksi</span>
                         {location.pathname === "/deteksi" && <motion.div layoutId="mobile-navbar-indicator" className="absolute h-[1.8px] w-full rounded-md bg-black" transition={{ type: "spring", duration: 1 }} />}
                     </Link>
-                    
+
                     {/* Mobile Profile Section */}
                     {data && (
                         <>
                             <div className="border-t border-gray-200 pt-4 mt-4">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <img
-                                        src={data.user.image || defaultAvatar}
-                                        alt={data.user.name || 'User'}
-                                        className="w-10 h-10 rounded-full object-cover"
-                                        onError={(e) => {
-                                            (e.target as HTMLImageElement).src = defaultAvatar;
-                                        }}
-                                    />
-                                    <div>
-                                        <p className="font-medium text-font-primary">
-                                            {data.user.name || 'User'}
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            {data.user.email}
-                                        </p>
-                                    </div>
-                                </div>
-                                <Link 
-                                    href="/profile" 
-                                    onClick={() => setTimeout(() => setIsMobileMenuOpen(false), 700)} 
+
+                                <Link
+                                    href="/profile"
+                                    onClick={() => setTimeout(() => setIsMobileMenuOpen(false), 700)}
                                     className="relative text-neutral-600 dark:text-neutral-300 mb-2 block"
                                 >
                                     <span className="block">Profil Saya</span>
@@ -245,9 +211,9 @@ const Navbars = () => {
 
                     <div className="mt-4 flex w-full flex-col gap-4">
                         {data ? (
-                            <NavbarButton 
-                                variant="secondary" 
-                                className="w-full text-red-600 border-red-200 hover:bg-red-50" 
+                            <NavbarButton
+                                variant="secondary"
+                                className="w-full text-red-600 border-red-200 hover:bg-red-50"
                                 onClick={() => {
                                     setTimeout(() => setIsMobileMenuOpen(false), 700);
                                     handleSignOut();
@@ -256,25 +222,34 @@ const Navbars = () => {
                                 Keluar
                             </NavbarButton>
                         ) : (
-                            <Link href="/login">
-                                <NavbarButton 
-                                    variant="secondary" 
-                                    className="w-full" 
-                                    onClick={() => setTimeout(() => setIsMobileMenuOpen(false), 700)}
+                            <Link href="/login" onClick={() => setTimeout(() => setIsMobileMenuOpen(false), 700)}>
+                                <NavbarButton
+                                    variant="secondary"
+                                    className="w-full border border-green-primary text-green-primary hover:bg-green-50"
                                 >
                                     Masuk
                                 </NavbarButton>
                             </Link>
                         )}
-                        <Link href="/deteksi">
-                            <NavbarButton 
-                                variant="primary" 
-                                className="bg-green-primary w-full" 
+                        {/* <Link href="/deteksi">
+                            <NavbarButton
+                                variant="primary"
+                                className="bg-green-primary w-full"
                                 onClick={() => setTimeout(() => setIsMobileMenuOpen(false), 700)}
                             >
                                 Mulai Sekarang
                             </NavbarButton>
+                        </Link> */}
+                        <Link href="/deteksi">
+                            <NavbarButton
+                                variant="primary"
+                                className="bg-green-primary w-full text-white"
+                                onClick={() => setTimeout(() => setIsMobileMenuOpen(false), 700)}
+                            >
+                                {data ? "Deteksi Sekarang" : "Mulai Sekarang"}
+                            </NavbarButton>
                         </Link>
+
                     </div>
                 </MobileNavMenu>
             </MobileNav>
