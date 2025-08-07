@@ -25,19 +25,19 @@ const features = [
 
 const Feature = () => {
 	return (
-		<section className="flex flex-col items-center gap-6 py-16">
+		<section className="flex flex-col items-center gap-6 py-12 md:py-16">
 			<div className="flex w-full max-w-7xl flex-col items-center gap-2.5 px-5">
-				<motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1] }} className="bg-green-second-light text-green-primary inline-flex items-center justify-center rounded-full px-4 py-1">
-					<p className="text-lg">Fitur Unggulan</p>
+				<motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1] }} className="bg-green-second-light text-green-primary inline-flex items-center justify-center rounded-full px-3 py-1 md:px-4 md:py-1">
+					<p className="text-sm md:text-lg">Fitur Unggulan</p>
 				</motion.div>
 
 				<motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.6, delay: 0.2, ease: [0.42, 0, 0.58, 1] }} className="flex flex-col gap-1 text-center">
-					<div className="text-font-primary text-3xl font-bold">Kenapa Harus Daunesia?</div>
-					<p className="text-font-primary max-w-200 text-lg font-normal break-words">Daunesia menggabungkan kearifan lokal dengan teknologi modern untuk membantumu memahami tanaman di sekitarmu.</p>
+					<div className="text-font-primary text-2xl md:text-3xl font-bold">Kenapa Harus Daunesia?</div>
+					<p className="text-font-primary md:max-w-200 text-md md:text-lg font-normal break-words">Daunesia menggabungkan kearifan lokal dengan teknologi modern untuk membantumu memahami tanaman di sekitarmu.</p>
 				</motion.div>
 
 				{/* Cards */}
-				<div className="mt-8 grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+				<div className="mt-6 md:mt-8 grid w-full grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{features.map((item, index) => (
 						<motion.div
 							key={index}
@@ -49,14 +49,14 @@ const Feature = () => {
 								delay: 0.3 + index * 0.2,
 								ease: [0.42, 0, 0.58, 1],
 							}}
-							className="border-green-secondary relative overflow-hidden rounded-xl border p-6 text-left shadow-sm"
+							className="border-green-secondary relative overflow-hidden rounded-xl border p-4 md:p-6 text-left shadow-sm"
 						>
 							<div className="mb-4 flex items-center gap-2">
 								<div className="flex h-10 items-center justify-center rounded-full">
 									<img src={item.icons.src} alt="icon" />
 								</div>
 							</div>
-							<h3 className="text-font-primary mb-2 text-lg font-semibold">{item.title}</h3>
+							<h3 className="text-font-primary mb-2 text-md md:text-lg font-semibold">{item.title}</h3>
 							<p className="text-font-secondary text-sm">{item.description}</p>
 							{/* <Meteors number={16} /> */}
 						</motion.div>
