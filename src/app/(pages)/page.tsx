@@ -1,16 +1,16 @@
 "use client";
 
-import Hero from "@/components/hero";
-import ContohDeteksi from "@/components/ExampleDetection";
+import Hero from "@/components/Hero";
+import ExampleDetection from "@/components/ExampleDetection";
 import Steps from "@/components/Step";
 import Feature from "@/components/Ourfeature";
-import ChooseUs from "@/components/chooseUs";
+import ChooseUs from "@/components/ChooseUs";
 
 export default function HomePage() {
 	return (
 		<>
 			<Hero />
-			<ContohDeteksi />
+			<ExampleDetection />
 			<Steps />
 			<Feature />
 			<ChooseUs />

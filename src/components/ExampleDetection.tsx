@@ -236,9 +236,9 @@ const ContohDeteksi = () => {
 						visible: { opacity: 1, y: 0 },
 					}}
 					transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1] }}
-					className="bg-green-second-light text-green-primary relative inline-flex items-center justify-center overflow-hidden rounded-full px-4 py-1"
+					className="bg-green-second-light text-green-primary relative inline-flex items-center justify-center overflow-hidden rounded-full px-3 py-1 md:px-4 md:py-1"
 				>
-					<p className="relative text-lg">Contoh Hasil Deteksi</p>
+					<p className="relative text-sm md:text-lg">Contoh Hasil Deteksi</p>
 				</motion.div>
 
 				<motion.div
@@ -249,8 +249,8 @@ const ContohDeteksi = () => {
 					transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1], delay: 0.1 }}
 					className="flex flex-col gap-1 text-center"
 				>
-					<h5 className="text-font-primary text-3xl font-bold">Kenali Tanaman Herbal Populer</h5>
-					<p className="text-font-primary text-lg font-normal">Beberapa contoh daun yang bisa kamu identifikasi langsung dengan Daunesia.</p>
+					<h5 className="text-font-primary text-2xl md:text-3xl font-bold">Kenali Tanaman Herbal Populer</h5>
+					<p className="text-font-primary md:text-lg font-normal">Beberapa contoh daun yang bisa kamu identifikasi langsung dengan Daunesia.</p>
 				</motion.div>
 
 				<div className="w-full">

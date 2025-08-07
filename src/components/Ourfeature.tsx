@@ -33,7 +33,7 @@ const Feature = () => {
 
 				<motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.6, delay: 0.2, ease: [0.42, 0, 0.58, 1] }} className="flex flex-col gap-1 text-center">
 					<div className="text-font-primary text-2xl md:text-3xl font-bold">Kenapa Harus Daunesia?</div>
-					<p className="text-font-primary md:max-w-200 text-md md:text-lg font-normal break-words">Daunesia menggabungkan kearifan lokal dengan teknologi modern untuk membantumu memahami tanaman di sekitarmu.</p>
+					<p className="text-font-primary md:max-w-200 md:text-lg font-normal break-words">Daunesia menggabungkan kearifan lokal dengan teknologi modern untuk membantumu memahami tanaman di sekitarmu.</p>
 				</motion.div>
 
 				{/* Cards */}
@@ -56,7 +56,7 @@ const Feature = () => {
 									<img src={item.icons.src} alt="icon" />
 								</div>
 							</div>
-							<h3 className="text-font-primary mb-2 text-md md:text-lg font-semibold">{item.title}</h3>
+							<h3 className="text-font-primary mb-2 md:text-lg font-semibold">{item.title}</h3>
 							<p className="text-font-secondary text-sm">{item.description}</p>
 							{/* <Meteors number={16} /> */}
 						</motion.div>

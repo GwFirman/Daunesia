@@ -157,7 +157,7 @@ export default function Register() {
 										<motion.div animate={{ y: [-12, 0], opacity: [0, 1] }} transition={{ duration: 1.3 }} className="text-font-primary text-4xl font-bold">
 											Buat Akun
 										</motion.div>
-										<motion.div animate={{ y: [-12, 0], opacity: [0, 1] }} transition={{ duration: 1.3, delay: 0.2 }} className="text-md text-font-secondary">
+										<motion.div animate={{ y: [-12, 0], opacity: [0, 1] }} transition={{ duration: 1.3, delay: 0.2 }} className="text-font-secondary">
 											Gabung sekarang untuk mendeteksi semua tanaman herbal di Indonesia
 										</motion.div>
 									</div>
