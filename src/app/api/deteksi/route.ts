@@ -72,7 +72,61 @@ export const POST = async (req: NextRequest) => {
 		];
 
 		const result = await app.predict("/predict", [handle_file(Buffer.from(buffer))]);
+		
+		// Log hasil mentah API
+		console.log('🔍 API Raw Data:', JSON.stringify(result.data, null, 2));
 
+		// Ekstrak referensi dari deskripsi tanaman - PERBAIKAN REGEX
+		let extractedRefs = [];
+		let description = '';
+		
+		// Cek apakah result.data adalah array dan ada elemen ke-3 (deskripsi)
+		if (result.data && Array.isArray(result.data) && result.data.length > 2) {
+			description = result.data[2] || '';
+			
+			// Log deskripsi lengkap untuk debugging
+			console.log('🔍 Raw description:', description);
+			
+			// Cari section referensi dengan lebih fleksibel
+			// Mendukung "### Referensi Resep", "### Referensi:", atau "### Referensi"
+			const refSection = /###\s*Referensi(?:\s*Resep)?(?::|)\s*([^#]*)/.exec(description);
+			
+			if (refSection && refSection[1]) {
+				console.log('🔍 Found Reference Section:', refSection[1]);
+				
+				// Ekstrak semua URL dengan pattern yang lebih fleksibel
+				// Mendukung [title](url) dan juga URL mentah seperti https://example.com
+				const linkRegex = /(?:\[([^\]]+)\]\(([^)]+)\))|(?:(https?:\/\/[^\s]+))/g;
+				let match;
+				
+				while ((match = linkRegex.exec(refSection[1])) !== null) {
+					if (match[2]) { // Format [title](url)
+						extractedRefs.push({
+							title: match[1],
+							url: match[2]
+						});
+					} else if (match[3]) { // URL mentah
+						extractedRefs.push({
+							title: `Referensi ${extractedRefs.length + 1}`,
+							url: match[3]
+						});
+					}
+				}
+				
+				console.log('📚 Extracted References:', extractedRefs);
+				
+				// Hapus bagian referensi dari deskripsi untuk menghindari duplikasi
+				description = description.replace(refSection[0], '');
+			}
+		}
+		
+		// Bentuk hasil yang diperkaya dengan referensi terpisah
+		const enhancedResult = {
+			...result,
+			plantDescription: description,
+			references: extractedRefs
+		};
+		
 		// Save detection to database if user is logged in
 		if (session?.user && result?.data) {
 			try {
@@ -98,7 +152,8 @@ export const POST = async (req: NextRequest) => {
 			}
 		}
 
-		return NextResponse.json({ success: true, result });
+		// Return hasil yang diperkaya
+		return NextResponse.json({ success: true, result: enhancedResult });
 	} catch (error) {
 		console.error('Detection API error:', error);
 		return NextResponse.json({ error: "Terjadi kesalahan" }, { status: 500 });

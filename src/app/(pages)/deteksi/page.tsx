@@ -31,9 +31,14 @@ export interface ErrorResponse {
 export interface Result {
   type: string;
   time: string;
-  data: [Data, string, string];
+  data: [Data, string, string, string?];
   endpoint: string;
   fn_index: number;
+  plantDescription?: string;
+  references?: Array<{
+    title: string;
+    url: string;
+  }>;
 }
 
 export interface Data {
@@ -96,8 +101,11 @@ export default function DeteksiPage() {
 
     setLoadingImages(true);
     try {
-      const images = await getPlantImagesFromTebi(plantName);
-      setPlantImages(images);
+      // Use the API route instead of direct Tebi access
+      const response = await axios.get(`/api/plant-images?plant=${encodeURIComponent(plantName)}`);
+      if (response.data && response.data.images) {
+        setPlantImages(response.data.images);
+      }
     } catch (error) {
       console.error("Error loading plant images:", error);
       setPlantImages([]);
@@ -140,14 +148,71 @@ export default function DeteksiPage() {
       const result = response.data.result;
       setResult(result);
 
-      // Extract plant name and description from the data array
+      // Tambahkan log yang lebih detail
+      console.log('🔍 API Response Full:', response.data);
+      console.log('📑 Result:', result);
+      console.log('🔍 Has references?', !!result.references);
+      console.log('🔗 References:', result.references || 'No references found');
+
+      // Extract plant name, description, and references from the data array
       if (result.data && result.data.length >= 3) {
         const detectedPlantName = result.data[1] || "";
-        const detectedPlantDescription = result.data[2] || "";
+        // Gunakan deskripsi dari field khusus jika ada
+        const detectedPlantDescription = result.plantDescription || result.data[2] || "";
 
         setPlantName(detectedPlantName);
         setPlantDescription(detectedPlantDescription);
-
+        
+        // TAMBAHAN: Ekstrak references dari result.data[3]
+        if (result.data.length > 3 && result.data[3]) {
+          console.log("🔗 References found in data[3]:", result.data[3]);
+          
+          // Parse references dari data[3]
+          try {
+            const refText = result.data[3].toString();
+            const references: { title: string; url: string; }[] = [];
+            
+            // Extract links dari text dengan regex
+            const linkRegex = /\[([^\]]+)\]\(([^)]+)\)|(?:https?:\/\/[^\s]+)/g;
+            let match;
+            
+            while ((match = linkRegex.exec(refText)) !== null) {
+              if (match[1] && match[2]) {
+                // Format [title](url)
+                references.push({
+                  title: match[1],
+                  url: match[2]
+                });
+              } else {
+                // URL langsung tanpa title
+                references.push({
+                  title: `Referensi ${references.length + 1}`,
+                  url: match[0]
+                });
+              }
+            }
+            
+            // Set references ke state result
+            setResult(prevResult => {
+              if (!prevResult) return prevResult;
+              return {
+                ...prevResult,
+                references: references,
+                type: prevResult.type,
+                time: prevResult.time,
+                data: prevResult.data,
+                endpoint: prevResult.endpoint,
+                fn_index: prevResult.fn_index,
+                plantDescription: prevResult.plantDescription,
+              };
+            });
+            
+            console.log("✅ Extracted references:", references);
+          } catch (error) {
+            console.error("Error parsing references:", error);
+          }
+        }
+        
         // Load plant images after setting plant name
         if (
           detectedPlantName &&
@@ -167,7 +232,7 @@ export default function DeteksiPage() {
           const errorData = error.response.data as ErrorResponse;
           setError(
             errorData.error ||
-              "Limit percobaan tercapai. Silakan login untuk melanjutkan."
+            "Limit percobaan tercapai. Silakan login untuk melanjutkan."
           );
         } else {
           setError("Terjadi kesalahan saat mendeteksi tanaman");
@@ -180,6 +245,8 @@ export default function DeteksiPage() {
       setUploadProgress(0);
       // Refresh remaining trials after detection attempt
       checkRemainingTrials();
+
+
     }
   }
 
@@ -206,6 +273,27 @@ export default function DeteksiPage() {
     checkRemainingTrials();
     return () => clearTimeout(timeout);
   }, []);
+
+  // Fungsi untuk mengekstrak domain dan mendapatkan favicon
+  function getWebsiteInfo(url: string) {
+    try {
+      const urlObj = new URL(url);
+      const domain = urlObj.hostname.replace('www.', '');
+      const siteName = domain.split('.')[0];
+      const capitalizedName = siteName.charAt(0).toUpperCase() + siteName.slice(1);
+      const favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+      
+      return {
+        name: capitalizedName,
+        favicon: favicon
+      };
+    } catch {
+      return {
+        name: "Referensi",
+        favicon: "https://www.google.com/s2/favicons?domain=example.com&sz=32"
+      };
+    }
+  }
 
   return (
     <motion.section
@@ -290,11 +378,10 @@ export default function DeteksiPage() {
                     setfile(droppedFile);
                   }
                 }}
-                className={`${
-                  isDragging
+                className={`${isDragging
                     ? "border-green-600 bg-green-50"
                     : "border-green-primary"
-                } flex h-70 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed transition-all duration-200`}
+                  } flex h-70 w-full flex-col items-center justify-center gap-4 rounded-lg border-[2px] border-dashed transition-all duration-200`}
               >
                 <svg
                   width="70"
@@ -373,9 +460,8 @@ export default function DeteksiPage() {
                   <div
                     className="bg-green-secondary h-2 rounded-full transition-all duration-300"
                     style={{
-                      width: `${
-                        uploadProgress === 100 ? 100 : uploadProgress
-                      }%`,
+                      width: `${uploadProgress === 100 ? 100 : uploadProgress
+                        }%`,
                     }}
                   ></div>
                 </div>
@@ -383,8 +469,8 @@ export default function DeteksiPage() {
                   {uploadProgress === 100
                     ? "Sedang memproses gambar..."
                     : uploadProgress > 0
-                    ? `Mengunggah... ${uploadProgress}%`
-                    : "Memproses gambar..."}
+                      ? `Mengunggah... ${uploadProgress}%`
+                      : "Memproses gambar..."}
                 </p>
               </motion.div>
             )}
@@ -427,7 +513,7 @@ export default function DeteksiPage() {
                 <div className="mt-3 p-3 bg-green-50 border border-green-light rounded-lg">
                   <p className="text-green-primary text-sm text-center">
                     💡 <strong>Tips:</strong> Login untuk mendapatkan percobaan
-                    tak terbatas dan fitur premium lainnya!
+                    tak terbatas dan fitur keren lainnya!
                   </p>
                 </div>
               )}
@@ -700,68 +786,75 @@ export default function DeteksiPage() {
                         </div>
                       )}
 
-                      {/* Plant Images Section */}
-                      <div className="border-t pt-4">
-                        <h5 className="text-font-primary font-semibold mb-3">
-                          Galeri Tanaman:
-                        </h5>
-
-                        {loadingImages ? (
-                          <div className="flex items-center justify-center py-8">
-                            <div className="flex items-center gap-2">
-                              <div className="w-4 h-4 border-2 border-green-secondary border-t-transparent rounded-full animate-spin"></div>
-                              <span className="text-green-secondary text-sm">
-                                Memuat gambar tanaman...
-                              </span>
+                      {/* Plant Images Gallery - Add this section */}
+                      {plantImages && plantImages.length > 0 && (
+                        <div className="border-t pt-4">
+                          <h5 className="text-font-primary font-semibold mb-3">
+                            Galeri Tanaman:
+                          </h5>
+                          {loadingImages ? (
+                            <div className="flex justify-center py-4">
+                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
                             </div>
+                          ) : (
+                            <div className="flex flex-row gap-2">
+                              {plantImages.map((imgSrc, index) => (
+                                <div key={index} className="aspect-square relative overflow-hidden rounded-md w-20">
+                                  <img 
+                                    src={imgSrc}  
+                                    alt={`${plantName} - ${index + 1}`}
+                                    className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
+                                    onError={(e) => {
+                                      console.log(`Failed to load image ${index + 1}`);
+                                      // Set a fallback image or hide the element
+                                      (e.target as HTMLImageElement).style.display = 'none';
+                                    }}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Referensi Resep - Dengan Favicon */}
+                      {result?.references && Array.isArray(result.references) && result.references.length > 0 ? (
+                        <div className="border-t pt-4">
+                          <h5 className="text-font-primary font-semibold mb-3">
+                            Referensi Resep:
+                          </h5>
+                          <div className="flex flex-col gap-2">
+                            {result.references.map((link, index) => {
+                              const websiteInfo = getWebsiteInfo(link.url);
+                              
+                              return (
+                                <a
+                                  key={index}
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-3 px-3 py-2 bg-green-50 hover:bg-green-100 rounded-md text-green-700 text-sm transition-colors"
+                                >
+                                  <img 
+                                    src={websiteInfo.favicon} 
+                                    alt=""
+                                    className="w-5 h-5 rounded-sm"
+                                    onError={(e) => {
+                                      // Fallback jika favicon tidak dapat diload
+                                      (e.target as HTMLImageElement).src = "https://www.google.com/s2/favicons?domain=example.com&sz=32";
+                                    }} 
+                                  />
+                                  {websiteInfo.name}
+                                </a>
+                              );
+                            })}
                           </div>
-                        ) : plantImages.length > 0 ? (
-                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                            {plantImages.map((imageUrl, index) => (
-                              <motion.div
-                                key={index}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{
-                                  duration: 0.3,
-                                  delay: index * 0.1,
-                                }}
-                                className="relative group cursor-pointer"
-                              >
-                                <img
-                                  src={imageUrl}
-                                  alt={`${plantName} - Gambar ${index + 1}`}
-                                  className="w-full h-32 object-cover rounded-lg shadow-md group-hover:shadow-lg transition-shadow duration-200"
-                                  onClick={() => {
-                                    // Optional: Open image in modal/lightbox
-                                    window.open(imageUrl, "_blank");
-                                  }}
-                                />
-                                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-200"></div>
-                              </motion.div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="text-center py-6 bg-gray-50 rounded-lg">
-                            <svg
-                              className="w-12 h-12 text-gray-400 mx-auto mb-2"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                              />
-                            </svg>
-                            <p className="text-gray-500 text-sm">
-                              Gambar tanaman tidak tersedia
-                            </p>
-                          </div>
-                        )}
-                      </div>
+                        </div>
+                      ) : (
+                        <div className="border-t pt-4">
+                          <p className="text-sm text-gray-500">Tidak ada referensi untuk tanaman ini.</p>
+                        </div>
+                      )}
                     </>
                   )}
                 </div>

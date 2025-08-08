@@ -169,7 +169,7 @@ export const NavbarLogo = () => {
 
 export const NavbarButton = ({
 	href,
-	as: Tag = "a",
+	as: Tag = "button",
 	children,
 	className,
 	variant = "primary",
@@ -190,8 +190,20 @@ export const NavbarButton = ({
 		gradient: "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
 	};
 
+	// Separate props for anchor and button to avoid type conflicts
+	if (href && Tag === "button") {
+		// Only pass anchor-allowed props
+		const { type, onClick, ...anchorProps } = props as React.ComponentPropsWithoutRef<"a">;
+		return (
+			<a href={href} className={cn(baseStyles, variantStyles[variant], className)} {...anchorProps}>
+				{children}
+			</a>
+		);
+	}
+
+	// Otherwise render the specified Tag (which could be button, div, or something else)
 	return (
-		<Tag href={href || undefined} className={cn(baseStyles, variantStyles[variant], className)} {...props}>
+		<Tag className={cn(baseStyles, variantStyles[variant], className)} {...props}>
 			{children}
 		</Tag>
 	);

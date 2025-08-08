@@ -130,7 +130,15 @@ export default function Login() {
 					<motion.div className="flex flex-1 p-5" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15, duration: 0.7, ease: "easeOut" }}>
 						<div className="flex flex-1 flex-col rounded-2xl bg-white p-4">
 							<div className="flex flex-row items-center m-2">
-								<motion.img animate={{ opacity: [0, 1] }} transition={{ duration: 1.2 }} src={Daunesia.src} alt="Logo Daunesia" className="h-8" />
+								<Link href="/">
+									<motion.img
+										animate={{ opacity: [0, 1] }}
+										transition={{ duration: 1.2 }}
+										src={Daunesia.src}
+										alt="Logo Daunesia"
+										className="h-8 cursor-pointer"
+									/>
+								</Link>
 								<motion.div animate={{ x: [20, 0], opacity: [0, 1] }} transition={{ duration: 0.8, delay: 0.2 }} className="text-font-primary mr-4 ml-auto font-medium">
 									<p className="hidden lg:inline">{"Belum ada akun? "}</p>
 									<Link href={"/register"} className="text-green-primary hover:underline">
@@ -177,9 +185,9 @@ export default function Login() {
 											whileTap={!loadingProvider ? { scale: 0.98 } : {}}
 											className={`flex h-12 w-full items-center justify-center gap-2 rounded-lg border-2 border-zinc-800/40 bg-white ${loadingProvider ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
 										>
-												<svg className="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
-													<path d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.404.597 24 1.326 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.31h3.587l-.467 3.622h-3.12V24h6.116C23.403 24 24 23.403 24 22.674V1.326C24 .597 23.403 0 22.675 0z" />
-												</svg>
+											<svg className="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+												<path d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.404.597 24 1.326 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.31h3.587l-.467 3.622h-3.12V24h6.116C23.403 24 24 23.403 24 22.674V1.326C24 .597 23.403 0 22.675 0z" />
+											</svg>
 											<p className="text-font-primary font-medium">
 												Login dengan Facebook
 											</p>
