@@ -537,14 +537,14 @@ export default function DeteksiPage() {
           <div className="bg-white  rounded-xl w-full shadow-lg px-2 pt-4 pb-4">
             <div className="flex flex-col justify-center items-center">
               <h6 className="text-md mb-2 text-center font-medium">Contoh Tanaman</h6>
-              <div className="flex flex-row gap-1 justify-between items-center max-w-sm">
+              <div className="flex flex-row gap-1 lg:gap-2 justify-between items-center max-w-sm">
                 {contohImages.map((img, i) => (
                   <img
                     key={i}
                     src={img.imgSrc}
                     alt=""
                     onClick={() => handleClickContoh(img.imgSrc, img.name)}
-                    className="cursor-pointer w-22 lg:w-23 aspect-square object-cover hover:scale-102 transition-transform rounded-sm"
+                    className="cursor-pointer w-22 md:w-24 lg:w-28 aspect-square object-cover hover:scale-102 transition-transform rounded-sm"
                   />
                 ))}
               </div>
