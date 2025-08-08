@@ -279,19 +279,34 @@ export default function DeteksiPage() {
     try {
       const urlObj = new URL(url);
       const domain = urlObj.hostname.replace('www.', '');
+      
+      // Filter out invalid or internal URLs
+      if (
+        domain === 'localhost' || 
+        domain.includes('127.0.0.1') || 
+        domain.includes('0.0.0.0') ||
+        domain.includes('192.168.') ||
+        domain.includes('10.0.') ||
+        domain.includes('internal') ||
+        domain === '' ||
+        domain.length < 3 ||
+        !domain.includes('.')
+      ) {
+        return null; // Return null for invalid domains
+      }
+      
       const siteName = domain.split('.')[0];
       const capitalizedName = siteName.charAt(0).toUpperCase() + siteName.slice(1);
       const favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
       
       return {
         name: capitalizedName,
-        favicon: favicon
+        favicon: favicon,
+        domain: domain,
+        isValid: true
       };
     } catch {
-      return {
-        name: "Referensi",
-        favicon: "https://www.google.com/s2/favicons?domain=example.com&sz=32"
-      };
+      return null; // Return null for invalid URLs
     }
   }
 
@@ -500,7 +515,7 @@ export default function DeteksiPage() {
                 disabled={
                   !file || isLoading || (!isLoggedIn && remainingTrials === 0)
                 }
-                className="flex-1 cursor-pointer flex items-center justify-center gap-2 rounded-full border-2 border-green-secondary bg-white px-5 py-2 text-green-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-50 transition-colors"
+                className="flex-1 cursor-pointer text-sm flex items-center justify-center gap-2 rounded-full border-2 border-green-secondary bg-white px-5 py-2 text-green-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-50 transition-colors"
               >
                 {isLoading ? "Memproses..." : "Mulai Deteksi"}
               </button>
@@ -519,17 +534,17 @@ export default function DeteksiPage() {
               )}
           </div>
 
-          <div className="bg-white p-4 rounded-xl w-fit shadow-lg">
-            <div className="flex flex-col">
-              <h6 className="text-sm mb-2">Contoh Tanaman</h6>
-              <div className="flex flex-row gap-2 justify-center items-center">
+          <div className="bg-white  rounded-xl w-full shadow-lg px-2 pt-4 pb-4">
+            <div className="flex flex-col justify-center items-center">
+              <h6 className="text-md mb-2 text-center font-medium">Contoh Tanaman</h6>
+              <div className="flex flex-row gap-1 justify-between items-center max-w-sm">
                 {contohImages.map((img, i) => (
                   <img
                     key={i}
                     src={img.imgSrc}
                     alt=""
                     onClick={() => handleClickContoh(img.imgSrc, img.name)}
-                    className="cursor-pointer w-22 aspect-square object-cover hover:scale-102 transition-transform rounded-sm"
+                    className="cursor-pointer w-22 lg:w-23 aspect-square object-cover hover:scale-102 transition-transform rounded-sm"
                   />
                 ))}
               </div>
@@ -653,7 +668,7 @@ export default function DeteksiPage() {
                     <>
                       <div className="border-b pb-4">
                         <div className="flex items-center gap-3 mb-3">
-                          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center shrink-0">
                             <svg
                               className="w-6 h-6 text-red-500"
                               fill="none"
@@ -669,21 +684,21 @@ export default function DeteksiPage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="text-red-500 text-xl font-bold mb-1">
+                            <h4 className="text-red-500 text-lg md:text-xl font-bold mb-1">
                               Tanaman Tidak Terdeteksi
                             </h4>
-                            <p className="text-font-primary text-sm">
+                            <p className="text-font-primary  text-sm">
                               Sepertinya gambar yang Anda upload bukan tanaman
                             </p>
                           </div>
                         </div>
                       </div>
 
-                      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                        <h5 className="text-red-700 font-semibold mb-2">
+                      <div className="bg-green-50-50 border border-green-200 rounded-lg p-4">
+                        <h5 className="text-green-secondary font-semibold mb-2">
                           Tips untuk hasil yang lebih baik:
                         </h5>
-                        <ul className="text-red-600 text-sm space-y-1 list-disc list-inside">
+                        <ul className="text-teal-950 text-sm space-y-1 list-disc list-inside">
                           <li>
                             Pastikan gambar menampilkan daun, bunga, buah, atau
                             bagian tanaman dengan jelas
@@ -699,7 +714,7 @@ export default function DeteksiPage() {
                       <div className="text-center">
                         <button
                           onClick={resetDeteksi}
-                          className="cursor-pointer inline-flex items-center gap-2 rounded-full bg-red-500 px-6 py-2 text-white hover:bg-red-600 transition-colors"
+                          className="cursor-pointer inline-flex items-center gap-2 rounded-full bg-green-secondary/20 border-2 border-green-secondary px-6 py-2 text-green-secondary hover:text-white hover:bg-green-secondary transition-colors"
                         >
                           <svg
                             className="w-4 h-4"
@@ -714,6 +729,7 @@ export default function DeteksiPage() {
                               d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                             />
                           </svg>
+                        
                           Coba Lagi
                         </button>
                       </div>
@@ -797,16 +813,18 @@ export default function DeteksiPage() {
                               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
                             </div>
                           ) : (
-                            <div className="flex flex-row gap-2">
+                            <div className="grid grid-cols-3 lg:grid-cols-5 gap-3">
                               {plantImages.map((imgSrc, index) => (
-                                <div key={index} className="aspect-square relative overflow-hidden rounded-md w-20">
+                                <div 
+                                  key={index} 
+                                  className="aspect-square relative overflow-hidden rounded-md shadow-sm hover:shadow-md transition-shadow"
+                                >
                                   <img 
                                     src={imgSrc}  
                                     alt={`${plantName} - ${index + 1}`}
                                     className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
                                     onError={(e) => {
                                       console.log(`Failed to load image ${index + 1}`);
-                                      // Set a fallback image or hide the element
                                       (e.target as HTMLImageElement).style.display = 'none';
                                     }}
                                   />
@@ -824,10 +842,14 @@ export default function DeteksiPage() {
                             Referensi Resep:
                           </h5>
                           <div className="flex flex-col gap-2">
-                            {result.references.map((link, index) => {
-                              const websiteInfo = getWebsiteInfo(link.url);
-                              
-                              return (
+                            {result.references
+                              // Filter out invalid URLs
+                              .map(link => ({ 
+                                ...link, 
+                                info: getWebsiteInfo(link.url) 
+                              }))
+                              .filter(item => item.info !== null)
+                              .map((link, index) => (
                                 <a
                                   key={index}
                                   href={link.url}
@@ -836,7 +858,7 @@ export default function DeteksiPage() {
                                   className="flex items-center gap-3 px-3 py-2 bg-green-50 hover:bg-green-100 rounded-md text-green-700 text-sm transition-colors"
                                 >
                                   <img 
-                                    src={websiteInfo.favicon} 
+                                    src={link.info?.favicon || "https://www.google.com/s2/favicons?domain=example.com&sz=32"} 
                                     alt=""
                                     className="w-5 h-5 rounded-sm"
                                     onError={(e) => {
@@ -844,10 +866,9 @@ export default function DeteksiPage() {
                                       (e.target as HTMLImageElement).src = "https://www.google.com/s2/favicons?domain=example.com&sz=32";
                                     }} 
                                   />
-                                  {websiteInfo.name}
+                                  {link.info?.name || link.title || "Referensi"}
                                 </a>
-                              );
-                            })}
+                              ))}
                           </div>
                         </div>
                       ) : (

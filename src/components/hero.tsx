@@ -13,10 +13,31 @@ import { useRouter } from "next/navigation";
 const Hero = () => {
   const { image, setImage } = useImage();
   const router = useRouter();
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     setImage(null);
   }, []);
+
+  // File validation function
+  const validateFile = (file: File): boolean => {
+    if (!file.type.startsWith("image/")) {
+      alert("Hanya file gambar yang diperbolehkan.");
+      return false;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Ukuran file maksimal 2MB.");
+      return false;
+    }
+    return true;
+  };
+
+  // Handle file selection
+  const handleFileSelect = (file: File | null) => {
+    if (file && validateFile(file)) {
+      setImage(file);
+    }
+  };
 
   return (
     <motion.section
@@ -87,8 +108,9 @@ const Hero = () => {
       <input
         id="gambar"
         type="file"
-        onChange={(e) => setImage(e.target.files ? e.target.files?.[0] : null)}
+        onChange={(e) => handleFileSelect(e.target.files ? e.target.files?.[0] : null)}
         className="hidden"
+        accept="image/*"
       />
 
       {/* <CardContainer className="w-full"> */}
@@ -104,7 +126,22 @@ const Hero = () => {
                 duration: 1.2,
                 ease: [0.42, 0, 0.58, 1],
               }}
-              className="border-green-primary lg:mt-12 flex h-70 w-full cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl border-[3px] border-dashed shadow-[0px_2px_2px_0px_rgba(0,0,0,0.25)]"
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsDragging(false);
+                const droppedFile = e.dataTransfer.files?.[0];
+                if (droppedFile) {
+                  handleFileSelect(droppedFile);
+                }
+              }}
+              className={`border-green-primary lg:mt-12 flex h-70 w-full cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl border-[3px] border-dashed shadow-[0px_2px_2px_0px_rgba(0,0,0,0.25)] ${
+                isDragging ? "border-green-600 bg-green-50" : ""
+              } transition-all duration-200`}
             >
               <svg
                 width="80"

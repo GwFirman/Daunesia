@@ -354,7 +354,7 @@ const Navbars = () => {
               {data ? (
                 <NavbarButton
                   variant="secondary"
-                  className="w-full text-red-600 border-red-200 hover:bg-red-50"
+                  className="w-full text-red-400 border-2 border-red-200 bg-red-50 hover:bg-red-400 hover:text-white"
                   onClick={() => {
                     setTimeout(() => setIsMobileMenuOpen(false), 700);
                     handleLogoutClick(); // Updated to show confirmation
@@ -431,7 +431,7 @@ const Navbars = () => {
                 </button>
                 <button
                 onClick={handleSignOut}
-                className="px-6 py-2.5 bg-red-600 text-white rounded-full font-medium hover:bg-red-700 transition-colors"
+                className="px-6 py-2.5 bg-red-50 border-2 border-red-400 text-red-400 hover:text-white rounded-full font-medium hover:bg-red-400 transition-colors"
                 >
                 Ya, Keluar
                 </button>
