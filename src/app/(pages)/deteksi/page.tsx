@@ -331,8 +331,8 @@ export default function DeteksiPage() {
           </h2>
           <p className="text-font-primary max-w-212.5 text-lg">
             Daunesia membantumu mengenal kekayaan tanaman herbal Indonesia.
-            Unggah foto daun, akar, bunga, atau biji dan sistem kami akan
-            mengenalinya beserta nama lokal dan khasiatnya.
+            Unggah foto tanaman dan sistem kami akan
+            mengenalinya beserta khasiat hingga saran pengolahannya.
           </p>
         </div>
       </motion.div>
@@ -694,7 +694,7 @@ export default function DeteksiPage() {
                         </div>
                       </div>
 
-                      <div className="bg-green-50-50 border border-green-200 rounded-lg p-4">
+                      <div className="bg-green-50-50 border border-green-secondary rounded-lg p-4">
                         <h5 className="text-green-secondary font-semibold mb-2">
                           Tips untuk hasil yang lebih baik:
                         </h5>
