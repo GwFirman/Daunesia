@@ -94,7 +94,7 @@ export const GET = async (req: NextRequest) => {
           icon: "leaf",
           unlocked: uniquePlants.length >= 5,
           unlockedAt: uniquePlants.length >= 5 ? new Date().toISOString() : undefined,
-          progress: Math.min((uniquePlants.length / 5) * 100, 100)
+          progress: Math.min(uniquePlants.length, 5)  // ✅ Ubah ke skala 5
         },
         {
           id: "3",

@@ -56,9 +56,26 @@ const Navbars = () => {
     await authClient.signOut();
   };
 
-  // Default avatar jika user tidak punya foto
-  const defaultAvatar =
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face";
+  // Default avatar - host secara lokal di public folder
+  const defaultAvatar = "/images/default-avatar.png";
+
+  // Fungsi helper untuk proxy image
+  const getProxiedImageUrl = (originalUrl: string | null) => {
+    if (!originalUrl) return defaultAvatar;
+    return `/api/avatar?url=${encodeURIComponent(originalUrl)}`;
+  };
+
+  // Fungsi helper untuk mendapatkan avatar URL
+  const getAvatarUrl = (originalUrl: string | null, name: string = "User") => {
+    if (!originalUrl) {
+      // Generate avatar dari nama user dengan UI Avatars API
+      const formattedName = encodeURIComponent(name.replace(/\s+/g, "+"));
+      return `https://ui-avatars.com/api/?name=${formattedName}&background=73946B&color=ffffff&size=200`;
+    }
+
+    // Gunakan proxy untuk external images (Gmail dll)
+    return `/api/avatar?url=${encodeURIComponent(originalUrl)}`;
+  };
 
   return (
     <Navbar>
@@ -141,11 +158,11 @@ const Navbars = () => {
                   className="relative flex items-center p-2 rounded-lg cursor-pointer"
                 >
                   <img
-                    src={data.user.image || defaultAvatar}
+                    src={getAvatarUrl(data?.user?.image ?? null, data?.user?.name)}
                     alt={data.user.name || "User"}
-                    className="w-9 h-9 rounded-full object-cover border-2 border-green-secondary"
+                    className="w-10 h-10 rounded-full object-cover"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = defaultAvatar;
+                      (e.target as HTMLImageElement).src = "/images/default-avatar.png";
                     }}
                   />
                   <AnimatePresence>
@@ -160,12 +177,15 @@ const Navbars = () => {
                         <div className="px-4 py-3 border-b border-gray-100">
                           <div className="flex items-center gap-3">
                             <img
-                              src={data.user.image || defaultAvatar}
+                              src={
+                                data?.user?.image
+                                  ? getProxiedImageUrl(data.user.image)
+                                  : defaultAvatar
+                              } // ✅ Gunakan proxy di sini juga
                               alt={data.user.name || "User"}
                               className="w-10 h-10 rounded-full object-cover"
                               onError={(e) => {
-                                (e.target as HTMLImageElement).src =
-                                  defaultAvatar;
+                                (e.target as HTMLImageElement).src = defaultAvatar;
                               }}
                             />
                             <div>

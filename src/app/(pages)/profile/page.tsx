@@ -31,6 +31,16 @@ interface UserStats {
   }>;
 }
 
+// Tambahkan fungsi getAvatarUrl di awal file, sebelum component
+const getAvatarUrl = (originalUrl: string | null, name: string = "User") => {
+  if (!originalUrl) {
+    // Generate avatar dari nama user dengan UI Avatars API
+    const formattedName = encodeURIComponent(name.replace(/\s+/g, '+'));
+    return `https://ui-avatars.com/api/?name=${formattedName}&background=73946B&color=ffffff&size=200`;
+  }
+  return originalUrl;
+};
+
 export default function ProfilePage() {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'history' | 'achievements'>('overview');
@@ -138,7 +148,8 @@ export default function ProfilePage() {
     id: session.user.id,
     name: session.user.name || 'User',
     email: session.user.email,
-    avatar: session.user.image || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
+    // ✅ Ganti Unsplash dengan UI Avatar
+    avatar: getAvatarUrl(session.user.image ?? null, session.user.name),
     joinDate: typeof session.user.createdAt === 'string'
       ? session.user.createdAt
       : new Date().toISOString(),
@@ -235,7 +246,8 @@ export default function ProfilePage() {
                   alt={userData.name}
                   className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-green-secondary"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face';
+                    // ✅ Ganti fallback juga dengan UI Avatar
+                    (e.target as HTMLImageElement).src = getAvatarUrl(null, userData.name);
                   }}
                 />
                 <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-primary rounded-full border-2 border-white flex items-center justify-center">
