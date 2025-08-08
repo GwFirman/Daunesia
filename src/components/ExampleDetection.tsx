@@ -227,16 +227,16 @@ const ContohDeteksi = () => {
 				visible: { transition: { staggerChildren: 0.3 } },
 				hidden: {},
 			}}
-			className="flex flex-col items-center gap-6 py-16 overflow-hidden"
+			className="flex flex-col items-center gap-6 py-16 "
 		>
-			<div className="-mb-38 flex w-full max-w-7xl flex-col items-center gap-2.5 px-5">
+			<div className="-mb-40 flex w-full max-w-7xl flex-col items-center gap-2.5 px-5">
 				<motion.div
 					variants={{
 						hidden: { opacity: 0, y: 20 },
 						visible: { opacity: 1, y: 0 },
 					}}
 					transition={{ duration: 0.6, ease: [0.42, 0, 0.58, 1] }}
-					className="bg-green-second-light text-green-primary relative inline-flex items-center justify-center overflow-hidden rounded-full px-3 py-1 md:px-4 md:py-1"
+					className="bg-green-second-light text-green-primary relative inline-flex items-center justify-center  rounded-full px-3 py-1 md:px-4 md:py-1"
 				>
 					<p className="relative text-sm md:text-lg">Contoh Hasil Deteksi</p>
 				</motion.div>
@@ -253,49 +253,52 @@ const ContohDeteksi = () => {
 					<p className="text-font-primary md:text-lg font-normal">Beberapa contoh daun yang bisa kamu identifikasi langsung dengan Daunesia.</p>
 				</motion.div>
 
-				<div className="w-full">
-					<motion.div
-						ref={containerRef}
-						variants={{
-							hidden: { opacity: 0, y: 30 },
-							visible: { opacity: 1, y: 0 },
-						}}
-						transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1], delay: 0.2 }}
-						className="relative mt-8 w-full overflow-hidden"
-						style={{ height: `${containerHeight}px` }}
-					>
-						<div className="relative aspect-square w-full max-w-xs mx-auto md:mx-0">
-							<img src={sirih.src} alt="" className="h-full w-full rounded-lg object-cover shadow-md" />
+				<div className="w-full overflow-x-auto xl:overflow-hidden">
+					{/* 👇 DIV PEMBUNGKUS SEDERHANA INI ADALAH KUNCINYA 👇 */}
+					<div className="w-max min-w-full">
+						<motion.div
+							ref={containerRef}
+							variants={{
+								hidden: { opacity: 0, y: 30 },
+								visible: { opacity: 1, y: 0 },
+							}}
+							transition={{ duration: 0.8, ease: [0.42, 0, 0.58, 1], delay: 0.2 }}
+							className="relative mt-8 w-7xl" // w-7xl membuat konten ini sangat lebar
+							style={{ height: `${containerHeight}px` }}
+						>
+							<div className="relative aspect-square w-full max-w-xs  md:mx-0">
+								<img src={sirih.src} alt="" className="h-full w-full rounded-lg object-cover shadow-md" />
 
-							<div className="absolute inset-4">
-								<svg className="object-cover" viewBox="0 0 324 324" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path d="M322 82V12C322 6.47715 317.523 2 312 2H242M322 242V312C322 317.523 317.523 322 312 322H242M82 2H12C6.47715 2 2 6.47715 2 12V82M2 242V312C2 317.523 6.47715 322 12 322H82" stroke="white" strokeWidth="4" strokeLinejoin="round" />
-								</svg>
+								<div className="absolute inset-4">
+									<svg className="object-cover" viewBox="0 0 324 324" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M322 82V12C322 6.47715 317.523 2 312 2H242M322 242V312C322 317.523 317.523 322 312 322H242M82 2H12C6.47715 2 2 6.47715 2 12V82M2 242V312C2 317.523 6.47715 322 12 322H82" stroke="white" strokeWidth="4" strokeLinejoin="round" />
+									</svg>
+								</div>
 							</div>
-						</div>
 
-						{/* React Flow overlay */}
-						<div className="absolute inset-0 overflow-hidden rounded-lg">
-							<ReactFlow //
-								nodesDraggable={false}
-								nodesConnectable={false}
-								elementsSelectable={false}
-								panOnDrag={false}
-								zoomOnScroll={false}
-								zoomOnDoubleClick={false}
-								nodes={nodes}
-								edges={edges}
-								onNodesChange={onNodesChange}
-								onConnect={onConnect}
-								nodeTypes={nodeTypes}
-								fitView={false}
-								className="bg-transparent"
-								proOptions={{ hideAttribution: true }}
-							/>
-						</div>
+							{/* React Flow overlay */}
+							<div className="absolute inset-0 overflow-hidden rounded-lg">
+								<ReactFlow //
+									nodesDraggable={false}
+									nodesConnectable={false}
+									elementsSelectable={false}
+									panOnDrag={false}
+									zoomOnScroll={false}
+									zoomOnDoubleClick={false}
+									nodes={nodes}
+									edges={edges}
+									onNodesChange={onNodesChange}
+									onConnect={onConnect}
+									nodeTypes={nodeTypes}
+									fitView={false}
+									className="bg-transparent"
+									proOptions={{ hideAttribution: true }}
+								/>
+							</div>
 
-						<div className="absolute inset-0 z-10"></div>
-					</motion.div>
+							<div className="absolute inset-0 z-10"></div>
+						</motion.div>
+					</div>
 				</div>
 			</div>
 		</motion.section>
