@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Daunesia
 
-## Getting Started
+## Website
+Kunjungi website kami di: [daunesia.vercel.app](https://daunesia.vercel.app)
 
-First, run the development server:
+## Tentang Proyek
+Daunesia adalah proyek yang dibangun menggunakan [Next.js](https://nextjs.org) dan di-bootstrap dengan [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Fitur Utama
+- Responsif dan modern UI
+- Performa tinggi berkat Next.js
+- SEO friendly
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Teknologi yang Digunakan
+- Next.js
+- React
+- TypeScript
+- Vercel (untuk deployment)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Pelajari Lebih Lanjut
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Untuk mempelajari lebih lanjut tentang Next.js, silakan lihat sumber daya berikut:
 
-## Learn More
+- [Dokumentasi Next.js](https://nextjs.org/docs) - pelajari tentang fitur dan API Next.js.
+- [Belajar Next.js](https://nextjs.org/learn) - tutorial interaktif Next.js.
 
-To learn more about Next.js, take a look at the following resources:
+Anda juga dapat melihat [repositori GitHub Next.js](https://github.com/vercel/next.js) - umpan balik dan kontribusi Anda sangat dihargai!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy di Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Cara termudah untuk men-deploy aplikasi Next.js adalah menggunakan [Platform Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) dari pembuat Next.js.
 
-## Deploy on Vercel
+Periksa [dokumentasi deployment Next.js](https://nextjs.org/docs/app/building-your-application/deploying) untuk informasi lebih lanjut.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Kontak
+Jika Anda memiliki pertanyaan atau saran, silakan hubungi tim pengembang kami.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Lisensi
+Hak Cipta © 2023 Daunesia. Seluruh hak cipta dilindungi.
+## Pelajari Lebih Lanjut
+
+Untuk mempelajari lebih lanjut tentang Next.js, silakan lihat sumber daya berikut:
+
+- [Dokumentasi Next.js](https://nextjs.org/docs) - pelajari tentang fitur dan API Next.js.
+- [Belajar Next.js](https://nextjs.org/learn) - tutorial interaktif Next.js.
+
+Anda juga dapat melihat [repositori GitHub Next.js](https://github.com/vercel/next.js) - umpan balik dan kontribusi Anda sangat dihargai!
+
+## Deploy di Vercel
+
+Cara termudah untuk men-deploy aplikasi Next.js adalah menggunakan [Platform Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) dari pembuat Next.js.
+
+Periksa [dokumentasi deployment Next.js](https://nextjs.org/docs/app/building-your-application/deploying) untuk informasi lebih lanjut.
+
+## Kontak
+Jika Anda memiliki pertanyaan atau saran, silakan hubungi tim pengembang kami.
+
+## Lisensi
+Hak Cipta © 2023 Daunesia. Seluruh hak cipta dilindungi.
