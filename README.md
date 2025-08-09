@@ -1,59 +1,47 @@
-# Daunesia
+# Daunesia 🌿
 
-## Website
-Kunjungi website kami di: [daunesia.vercel.app](https://daunesia.vercel.app)
+Mengidentifikasi kekayaan tanaman herbal Indonesia kini semudah mengambil foto. Daunesia hadir untuk menjembatani kearifan lokal dengan teknologi AI modern, memberikan akses instan terhadap pengetahuan etnobotani Nusantara.
 
-## Tentang Proyek
-Daunesia adalah proyek yang dibangun menggunakan [Next.js](https://nextjs.org) dan di-bootstrap dengan [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Live Demo
+
+
+### 👉 **Kunjungi Website: [https://daunesia.vercel.app/](https://daunesia.vercel.app/)**
+
+---
 
 ## Fitur Utama
-- Responsif dan modern UI
-- Performa tinggi berkat Next.js
-- SEO friendly
+
+-   **Identifikasi Tanaman Dua Tahap:** Sistem cerdas yang pertama-tama memastikan gambar yang diunggah adalah tanaman menggunakan model **MobileNetV2**, sebelum mengklasifikasikan jenis tanaman herbal secara spesifik menggunakan model **VGG16**.
+-   **Informasi Lengkap & Dinamis:** Tidak hanya memberikan nama, setiap hasil identifikasi diperkaya dengan deskripsi, manfaat, dan cara pengolahan umum yang dihasilkan secara dinamis oleh **Google Gemini AI**.
+-   **Referensi Resep Lokal:** Menyediakan tautan ke resep atau cara pengolahan tradisional dari sumber data lokal, memberikan konteks penggunaan yang lebih praktis.
+-   **Antarmuka Modern & Responsif:** Dibangun dengan desain yang bersih dan dapat diakses dengan baik di berbagai perangkat, baik desktop maupun mobile.
+
+---
+
+## Keunggulan & Inovasi
+
+1.  **Integrasi AI Ganda:** Daunesia tidak hanya menggunakan AI untuk klasifikasi gambar (*Computer Vision*), tetapi juga mengintegrasikan AI Generatif (*Large Language Model*) untuk menyajikan informasi yang kaya, dinamis, dan kontekstual, bukan sekadar teks statis dari database.
+2.  **Satu Foto, Info Lengkap:** Mengubah selembar foto daun menjadi paket informasi yang komprehensif. Pengguna mendapatkan jawaban atas "Ini tanaman apa?" dan "Apa kegunaannya?" dalam satu proses yang mulus.
+3.  **Modernisasi Kearifan Lokal:** Daunesia berfungsi sebagai jembatan digital yang mengubah pengetahuan herbal tradisional menjadi data yang cerdas, interaktif, dan mudah diakses oleh generasi Society 5.0, mendukung pelestarian warisan budaya.
+
+---
 
 ## Teknologi yang Digunakan
-- Next.js
-- React
-- TypeScript
-- Vercel (untuk deployment)
 
-## Pelajari Lebih Lanjut
+**Fullstack:**
+-   Next.js
+-   Tailwind CSS
 
-Untuk mempelajari lebih lanjut tentang Next.js, silakan lihat sumber daya berikut:
+**Machine Learning:**
+-   Python
+-   PyTorch
+-   VGG16 (Klasifikasi Herbal)
+-   MobileNetV2 (Klasifikasi Biner)
+-   Google Gemini (Generasi Teks)
 
-- [Dokumentasi Next.js](https://nextjs.org/docs) - pelajari tentang fitur dan API Next.js.
-- [Belajar Next.js](https://nextjs.org/learn) - tutorial interaktif Next.js.
+**Database & Storage:**
+-   MongoDB (Data Pengguna)
+-   Teby.io (Penyimpanan Gambar S3-Compatible)
 
-Anda juga dapat melihat [repositori GitHub Next.js](https://github.com/vercel/next.js) - umpan balik dan kontribusi Anda sangat dihargai!
-
-## Deploy di Vercel
-
-Cara termudah untuk men-deploy aplikasi Next.js adalah menggunakan [Platform Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) dari pembuat Next.js.
-
-Periksa [dokumentasi deployment Next.js](https://nextjs.org/docs/app/building-your-application/deploying) untuk informasi lebih lanjut.
-
-## Kontak
-Jika Anda memiliki pertanyaan atau saran, silakan hubungi tim pengembang kami.
-
-## Lisensi
-Hak Cipta © 2023 Daunesia. Seluruh hak cipta dilindungi.
-## Pelajari Lebih Lanjut
-
-Untuk mempelajari lebih lanjut tentang Next.js, silakan lihat sumber daya berikut:
-
-- [Dokumentasi Next.js](https://nextjs.org/docs) - pelajari tentang fitur dan API Next.js.
-- [Belajar Next.js](https://nextjs.org/learn) - tutorial interaktif Next.js.
-
-Anda juga dapat melihat [repositori GitHub Next.js](https://github.com/vercel/next.js) - umpan balik dan kontribusi Anda sangat dihargai!
-
-## Deploy di Vercel
-
-Cara termudah untuk men-deploy aplikasi Next.js adalah menggunakan [Platform Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) dari pembuat Next.js.
-
-Periksa [dokumentasi deployment Next.js](https://nextjs.org/docs/app/building-your-application/deploying) untuk informasi lebih lanjut.
-
-## Kontak
-Jika Anda memiliki pertanyaan atau saran, silakan hubungi tim pengembang kami.
-
-## Lisensi
-Hak Cipta © 2023 Daunesia. Seluruh hak cipta dilindungi.
+**Deployment:**
+-   Vercel
