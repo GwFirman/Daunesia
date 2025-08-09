@@ -35,7 +35,7 @@ Mengidentifikasi kekayaan tanaman herbal Indonesia kini semudah mengambil foto. 
 **Machine Learning:**
 -   Python
 -   PyTorch
--   VGG16 (Klasifikasi Herbal)
+-   VGG11 (Klasifikasi Herbal)
 -   MobileNetV2 (Klasifikasi Biner)
 -   Google Gemini (Generasi Teks)
 
